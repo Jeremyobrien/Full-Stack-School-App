@@ -5,7 +5,7 @@ const express = require('express');
 const res = require('express/lib/response');
 const morgan = require('morgan');
 const { sequelize } = require('./models');
-
+const cors = require('cors');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
@@ -17,6 +17,9 @@ const app = express();
 app.use(morgan('dev'));
 
 app.use(express.json());
+
+//Enable all CORS Requests
+app.use(cors());
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
