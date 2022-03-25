@@ -1,28 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import {Routes, Route } from 'react-router-dom'
+import { ResultProvider } from './components/Context';
 // import './App.css';
+import Courses from './components/Courses';
 
 function App() {
-  const [list, setList] = useState([]);
-
-  useEffect( ()=> {
-    axios.get(`http://localhost:5000/api/courses`)
-      .then(response => { setList(response.data)})
-      .catch(error => { console.log('Error fetching and parsing data', error)})
-  }, []);
-
-
   return (
-    <div className="App">
-      <ul>
-      {
-        list.map( course => 
-        <li key={list.indexOf(course)}>{course.title}</li>
-        )
-      }
-      </ul>
+    //routes for SPA
+    <ResultProvider>
+        <div>             
 
-    </div>
+              <Routes>
+                <Route path='/' element={ <Courses /> } >
+                  {/* <Route path='search/:query' element={} />
+                  <Route path='kitties' element={  } />
+                  <Route path='puppies' element={  } />
+                  <Route path='iguanas' element={  } /> */}
+                </Route>
+                {/* <Route path="*" element={ <NotFound />} /> */}
+            </Routes>
+        </div>
+    </ResultProvider>
   );
 }
 
