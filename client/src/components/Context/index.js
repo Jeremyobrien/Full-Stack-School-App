@@ -4,6 +4,7 @@ import React, {
     useState
 }from 'react';
 import axios from 'axios';
+import { Navigate, useLocation } from 'react-router-dom';
 // import { useLocation } from 'react-router-dom';
 
 //create context for variables and functions
@@ -25,12 +26,41 @@ export function ResultProvider({ children }) {
 //   const location = useLocation();
 
   const [list, setList] = useState([]);
+  const [query, setQuery ] = useState('');
+  const location = useLocation();
+  const [course, setCourse] = useState([]);
 
   useEffect( ()=> {
-    axios.get(`http://localhost:5000/api/courses`)
-      .then(response => { setList(response.data)})
-      .catch(error => { console.log('Error fetching and parsing data', error)})
+      const getCourses = async () => {
+        const response = await axios.get('http://localhost:5000/api/courses')
+        setList(response.data);
+      };
+      getCourses();
+
   }, []);
+
+    useEffect( ()=> {
+        if (query !== ''){
+            const getCourse = async () => {
+                const response = await axios.get(`http://localhost:5000/api/courses/${query}`)
+                await setCourse(response.data);
+              };
+              getCourse();
+        }
+
+    }, [query]);
+
+
+
+
+//   useEffect( ()=> {
+//     axios.get(`http://localhost:5000/api/courses/${query}`)
+//     .then(response => { setCourse(response.data)})
+//     .then( () => console.log(course))
+//     .then( ()=> console.log(query))
+//     .catch(error => { console.log('Error fetching and parsing data', error)})
+//   }, [query]);
+
 //   //api function
 //    const fetchData = (queryString) => {
 //         setIsLoading(true);
@@ -43,15 +73,17 @@ export function ResultProvider({ children }) {
 //     //loads initial photos
 //     useEffect( ()=> {fetchData(query)}, [query]);
 
-//     //ensures url params match search results
-//     useEffect( ()=> { 
-//         const searchTerm = location.pathname.replace('/search/', '').replace('/', '');
-//         searchTerm === '' ? setQuery(query) : setQuery(searchTerm);
-//     }, [location, query]);
+    //ensures url params match search results
+    useEffect( ()=> { 
+        const urlParam = location.pathname.replace('/', '');
+        urlParam === '' ? setQuery('') : setQuery(urlParam);
+    }, [location]);
 
+
+    
     return (
-        <ResultContext.Provider value={{ list }}>       
-            <ResultUpdateContext.Provider value={{}}>
+        <ResultContext.Provider value={{ list, query, course }}>       
+            <ResultUpdateContext.Provider value={{setQuery}}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>

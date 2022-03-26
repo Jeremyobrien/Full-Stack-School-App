@@ -1,16 +1,45 @@
 
-import React, { useData } from './Context';
+import React, { useData, useUpdateData } from './Context';
 import { NavLink } from 'react-router-dom';
+import  CreateCourse  from './CreateCourse';
+import NotFound from './NotFound';
+import CourseDetail from './CourseDetail';
 
 const Courses = () => {
     const { list } = useData();
+    const { setQuery } = useUpdateData();
+
+    let courseInfo;
+
+    const handleClick = () => {
+        courseInfo = <CourseDetail />
+    }
 
     return (
-        <ul>
+        <div>
+            <ul>
             {
-                list.map( course => <li key={list.indexOf(course)}>{course.title}</li>)
+                list.map(course => 
+                    <li key={list.indexOf(course)}>
+                        <NavLink to={`/${list.indexOf(course)+1}`} >
+                        <button onClick={handleClick}>{course.title}</button>
+                        </NavLink>
+                    </li>)
             }
-        </ul>
+            </ul>
+        <button type='button'>
+            Create Course
+        </button>
+            {/* <Routes>
+                <Route path='/' element={<CreateCourse />}>
+                    <button type='button'>
+                        Create Course
+                    </button>
+                </Route>
+                <Route path="*" element={ <NotFound />} />
+            </Routes> */}
+        </div>
+
     //     <main>
     //     <div className="wrap main--grid">
     //       <a className="course--module course--link" href="course-detail.html">
