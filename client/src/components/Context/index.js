@@ -75,9 +75,9 @@ export function ResultProvider({ children }) {
 
     //ensures url params match search results
     useEffect( ()=> { 
-        const urlParam = location.pathname.replace('/', '');
+        const urlParam = location.pathname.replace('/courses/', '').replace('/', '');
         urlParam === '' ? setQuery('') : setQuery(urlParam);
-    }, [location]);
+    }, [location, query]);
 
 
     

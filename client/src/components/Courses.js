@@ -6,39 +6,32 @@ import NotFound from './NotFound';
 import CourseDetail from './CourseDetail';
 
 const Courses = () => {
-    const { list } = useData();
+    const { list, query, course } = useData();
     const { setQuery } = useUpdateData();
 
-    let courseInfo;
-
-    const handleClick = () => {
-        courseInfo = <CourseDetail />
+    const handleClick = async (choice) => {
+        await setQuery(choice)
     }
 
-    return (
-        <div>
-            <ul>
-            {
-                list.map(course => 
-                    <li key={list.indexOf(course)}>
-                        <NavLink to={`/${list.indexOf(course)+1}`} >
-                        <button onClick={handleClick}>{course.title}</button>
-                        </NavLink>
-                    </li>)
-            }
-            </ul>
-        <button type='button'>
-            Create Course
-        </button>
-            {/* <Routes>
-                <Route path='/' element={<CreateCourse />}>
-                    <button type='button'>
-                        Create Course
-                    </button>
-                </Route>
-                <Route path="*" element={ <NotFound />} />
-            </Routes> */}
-        </div>
+// onClick={() => handleClick(list.indexOf(course))}
+
+        return  (
+            <div>
+                <ul>
+                    {
+                        list.map(course => <li key={list.indexOf(course)}>
+                            <NavLink to={`/courses/${list.indexOf(course) + 1}`}>
+                                {course.title}
+                            </NavLink>
+                            </li>)
+                    }
+                </ul>
+            </div>
+        )
+
+}
+   
+
 
     //     <main>
     //     <div className="wrap main--grid">
@@ -55,8 +48,6 @@ const Courses = () => {
     //       </a>
     //     </div>
     //   </main>
-    );
 
-}
 
 export default Courses;

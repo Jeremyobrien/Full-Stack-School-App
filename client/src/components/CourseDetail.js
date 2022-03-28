@@ -1,16 +1,18 @@
 
-import React, { useData } from './Context';
+import React from 'react';
+import { useData } from './Context';
 
 const CourseDetail = () => {
 
-    const { course, query } = useData();
+    const {course } = useData();
 
-            return (
-            <div>
-                <h3>{course.title}</h3>
-                <h3>{course.description}</h3>
-            </div>
-            )
+
+    return(
+    <div>
+    {course.title}
+    </div>
+    )
+
 }
 
 
