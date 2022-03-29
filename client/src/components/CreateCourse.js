@@ -5,7 +5,7 @@ const CreateCourse = () => {
 
     return (
         <div>
-
+            Success
         </div>
 
     );
