@@ -18,10 +18,10 @@ const Header = () => {
             </div>
 
             <header>
-                <div class="wrap header--flex">
-                    <h1 class="header--logo"><a href="index.html">Courses</a></h1>
+                <div className="wrap header--flex">
+                    <h1 className="header--logo"><NavLink to={'/'}>Courses</NavLink></h1>
                     <nav>
-                        <ul class="header--signedout">
+                        <ul className="header--signedout">
                             <li><NavLink to={'/signup'}>Sign Up</NavLink></li>
                             <li><NavLink to={'/signin'}>Sign In</NavLink></li>
                         </ul>

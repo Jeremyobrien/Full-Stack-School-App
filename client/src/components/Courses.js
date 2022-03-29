@@ -8,14 +8,14 @@ const Courses = () => {
     const { list } = useData();
 
     return (
-        <body>
+
             <div id="root">
             <Header />
             <main>
                 <div className="wrap main--grid">  
                         {
                             list.map(course =>
-                                <NavLink to={`/courses/${list.indexOf(course) + 1}`} className="course--module course--link">
+                                <NavLink key={list.indexOf(course) + 1} to={`/courses/${list.indexOf(course) + 1}`} className="course--module course--link">
                                     <h2 className="course--label">Course</h2>
                                     <h3 className="course--title">{course.title}</h3>
                                 </NavLink>
@@ -30,7 +30,7 @@ const Courses = () => {
                 </div>
             </main>
             </div>
-        </body>
+
     );
 
 }

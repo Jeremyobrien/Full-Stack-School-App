@@ -4,7 +4,7 @@ import React, {
     useState
 }from 'react';
 import axios from 'axios';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 // import { useLocation } from 'react-router-dom';
 
 //create context for variables and functions
@@ -29,9 +29,10 @@ export function ResultProvider({ children }) {
   const [query, setQuery ] = useState('');
   const location = useLocation();
   const [course, setCourse] = useState([]);
+  const { id } = useParams;
 
   useEffect( ()=> {
-      const getCourses = async () => {
+        const getCourses = async () => {
         const response = await axios.get('http://localhost:5000/api/courses')
         setList(response.data);
       };
@@ -40,6 +41,7 @@ export function ResultProvider({ children }) {
   }, []);
 
     useEffect( ()=> {
+
         if (query !== ''){
             const getCourse = async () => {
                 const response = await axios.get(`http://localhost:5000/api/courses/${query}`)
@@ -51,38 +53,15 @@ export function ResultProvider({ children }) {
     }, [query]);
 
 
-
-
-//   useEffect( ()=> {
-//     axios.get(`http://localhost:5000/api/courses/${query}`)
-//     .then(response => { setCourse(response.data)})
-//     .then( () => console.log(course))
-//     .then( ()=> console.log(query))
-//     .catch(error => { console.log('Error fetching and parsing data', error)})
-//   }, [query]);
-
-//   //api function
-//    const fetchData = (queryString) => {
-//         setIsLoading(true);
-//         axios.get(`https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${apiKey}&tags=${queryString}&per_page=24&format=json&nojsoncallback=1`)
-//             .then(response => { setPhotos(response.data.photos.photo)})
-//             .catch(error => { console.log('Error fetching and parsing data', error)})
-//             .finally( ()=> setIsLoading(false));
-//         }
-
-//     //loads initial photos
-//     useEffect( ()=> {fetchData(query)}, [query]);
-
-    //ensures url params match search results
     useEffect( ()=> { 
-        const urlParam = location.pathname.replace('/courses/', '').replace('/', '');
+        const urlParam = location.pathname.replace('/courses/', '').replace('/', '').replace('update', '');
         urlParam === '' ? setQuery('') : setQuery(urlParam);
     }, [location, query]);
 
 
     
     return (
-        <ResultContext.Provider value={{ list, query, course }}>       
+        <ResultContext.Provider value={{ list, query, course, id }}>       
             <ResultUpdateContext.Provider value={{setQuery}}>
                 {children}
             </ResultUpdateContext.Provider>
