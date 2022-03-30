@@ -5,9 +5,10 @@ const UpdateCourse = () => {
 
     return (
         <div>
-
+           <h1>
+               Pig
+           </h1>
         </div>
-
     );
 
 }

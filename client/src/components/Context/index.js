@@ -4,7 +4,7 @@ import React, {
     useState
 }from 'react';
 import axios from 'axios';
-import { useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
 // import { useLocation } from 'react-router-dom';
 
 //create context for variables and functions
@@ -28,9 +28,9 @@ export function ResultProvider({ children }) {
   const [list, setList] = useState([]);
   const [query, setQuery ] = useState('');
   const location = useLocation();
-  const [course, setCourse] = useState([]);
+//   const [course, setCourse] = useState([]);
   const { id } = useParams;
-
+  const navigate = useNavigate();
   useEffect( ()=> {
         const getCourses = async () => {
         const response = await axios.get('http://localhost:5000/api/courses')
@@ -40,29 +40,37 @@ export function ResultProvider({ children }) {
 
   }, []);
 
-    useEffect( ()=> {
+    // useEffect( ()=> {
 
-        if (query !== ''){
-            const getCourse = async () => {
-                const response = await axios.get(`http://localhost:5000/api/courses/${query}`)
-                await setCourse(response.data);
-              };
-              getCourse();
-        }
+    //     if (query !== '' ){
+    //         const getCourse = async () => {
+    //             const response = await axios.get(`http://localhost:5000/api/courses/${query}`)
+    //             await setCourse(response.data);
+    //           };
+    //           getCourse();
+    //     }
 
-    }, [query]);
-
-
-    useEffect( ()=> { 
-        const urlParam = location.pathname.replace('/courses/', '').replace('/', '').replace('update', '');
-        urlParam === '' ? setQuery('') : setQuery(urlParam);
-    }, [location, query]);
+    // }, [query]);
 
 
+    // useEffect( ()=> { 
+    //     const urlParam = location.pathname.replace('/courses/', '').replace('/', '').replace('update', '');
+    //     urlParam === '' ? setQuery('') : setQuery(urlParam);
+    // }, [location, query]);
+
+    const handleDelete = async (courseId) => {
+        const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)
+        await setList(res);
+        navigate('/');
+    }
+
+    const handleUpdate = async () => {
+        
+    }
     
     return (
-        <ResultContext.Provider value={{ list, query, course, id }}>       
-            <ResultUpdateContext.Provider value={{setQuery}}>
+        <ResultContext.Provider value={{ list, query, id }}>       
+            <ResultUpdateContext.Provider value={{setQuery, handleDelete}}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>
