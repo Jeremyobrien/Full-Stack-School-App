@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { useUpdateData } from './Context';
 import { NavLink } from 'react-router-dom';
-
+import Header from './Header';
 const CreateCourse = (callback) => {
     const [inputs, setInputs] = useState({});
 
@@ -20,8 +20,9 @@ const CreateCourse = (callback) => {
       }
 
     return (
-
-            <main>
+      <div>
+        <Header />
+        <main>
               <div className="wrap">
                 <h2>Create Course</h2>
                 <div className="validation--errors">
@@ -35,14 +36,14 @@ const CreateCourse = (callback) => {
                   <div className="main--flex">
                     <div>
                       <label htmlFor="courseTitle">Course Title</label>
-                      <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.courseTitle} defaultValue />
+                      <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.courseTitle}  />
                       <p>By Joe Smith</p>
                       <label htmlFor="courseDescription">Course Description</label>
                       <textarea id="courseDescription" name="courseDescription" onChange={handleInputChange} value={inputs.courseDescription} defaultValue={""} />
                     </div>
                     <div>
                       <label htmlFor="estimatedTime">Estimated Time</label>
-                      <input id="estimatedTime" name="estimatedTime" type="text" onChange={handleInputChange} value={inputs.estimatedTime} defaultValue />
+                      <input id="estimatedTime" name="estimatedTime" type="text" onChange={handleInputChange} value={inputs.estimatedTime}  />
                       <label htmlFor="materialsNeeded">Materials Needed</label>
                       <textarea id="materialsNeeded" name="materialsNeeded" onChange={handleInputChange} value={inputs.materialsNeeded} defaultValue={""} />
                     </div>
@@ -52,6 +53,8 @@ const CreateCourse = (callback) => {
                 </form>
               </div>
             </main>
+      </div>
+
     );
 
 }

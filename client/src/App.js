@@ -1,4 +1,4 @@
-import {Routes, Route } from 'react-router-dom'
+import {Routes, Route, Navigate } from 'react-router-dom'
 import { ResultProvider } from './components/Context';
 // import './App.css';
 import Courses from './components/Courses';
@@ -23,7 +23,7 @@ function App() {
                   <Route path='courses/:id/update' element={<UpdateCourse />} />
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />
-                  <Route pahth='signout' element={ <UserSignOut />} />
+                  <Route path='signout' element={ <Navigate to={'/'} />} />
                 <Route path="*" element={ <NotFound />} />
               </Routes>
         </div>

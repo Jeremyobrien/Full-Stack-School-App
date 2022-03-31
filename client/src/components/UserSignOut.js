@@ -1,14 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import Courses from './Courses';
+
 
 const UserSignOut = () => {
 
-
-    return (
-        <div>
-
-        </div>
-
-    );
+return (
+    <div>
+    </div>
+)
 
 }
 
