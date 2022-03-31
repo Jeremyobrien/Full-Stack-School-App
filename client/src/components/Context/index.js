@@ -31,6 +31,7 @@ export function ResultProvider({ children }) {
 //   const [course, setCourse] = useState([]);
   const { id } = useParams;
   const navigate = useNavigate();
+  
   useEffect( ()=> {
         const getCourses = async () => {
         const response = await axios.get('http://localhost:5000/api/courses')
@@ -58,19 +59,36 @@ export function ResultProvider({ children }) {
     //     urlParam === '' ? setQuery('') : setQuery(urlParam);
     // }, [location, query]);
 
+    // useEffect( ()=> { 
+    //     const urlParam = location.pathname
+    //     if(urlParam.includes('update')){
+    //         handleCourseSelect(id)
+    //     }
+
+    // }, [location, id]);
+
     const handleDelete = async (courseId) => {
         const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)
-        await setList(res);
+        setList(res);
         navigate('/');
     }
 
-    const handleUpdate = async () => {
-        
+    const handleCreate = async (newCourse) => {
+        const res = await axios.post('http://localhost:5000/api/courses/', newCourse )
+        setList(res)
+        navigate('/')
     }
+
+    const handleUpdate = async (updatedCourse) => {
+        const res = await axios.put(`http://localhost:5000/api/courses/${id}`, updatedCourse)
+        setList(res)
+        navigate('/')
+    }
+
     
     return (
         <ResultContext.Provider value={{ list, query, id }}>       
-            <ResultUpdateContext.Provider value={{setQuery, handleDelete}}>
+            <ResultUpdateContext.Provider value={{setQuery, handleDelete, handleCreate, handleUpdate }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>

@@ -9,7 +9,7 @@ import UpdateCourse from './components/UpdateCourse';
 import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
-import CourseList from './components/CourseList';
+
 
 function App() {
   return (
@@ -17,8 +17,10 @@ function App() {
     <ResultProvider>
         <div>             
               <Routes>
-                <Route path='/' element={ <CourseList />} />
-                  <Route path='courses/*' element={ <Courses /> } />
+                <Route path='/' element={ <Courses />} />
+                  <Route path='courses/create' element={<CreateCourse />} />
+                  <Route path='courses/:id' element={ <CourseDetail />} />
+                  <Route path='courses/:id/update' element={<UpdateCourse />} />
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />
                   <Route pahth='signout' element={ <UserSignOut />} />
