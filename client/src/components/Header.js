@@ -1,7 +1,11 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom'
+import { useData } from './Context';
 
 const Header = () => {
+    const { user } = useData();
+    const {firstName, lastName } = user;
+
     return(
         <div>
             <div>
@@ -21,10 +25,19 @@ const Header = () => {
                 <div className="wrap header--flex">
                     <h1 className="header--logo"><NavLink to={'/'}>Courses</NavLink></h1>
                     <nav>
+                    {
+                        user ?
+                            <React.Fragment>
+                                <span>Welcome, {firstName} {lastName}{' '}</span>
+                                
+                                <NavLink to={'/signout'}>Sign Out</NavLink>
+                            </React.Fragment>
+                         :
                         <ul className="header--signedout">
                             <li><NavLink to={'/signup'}>Sign Up</NavLink></li>
                             <li><NavLink to={'/signin'}>Sign In</NavLink></li>
                         </ul>
+                    }
                     </nav>
                 </div>
             </header>

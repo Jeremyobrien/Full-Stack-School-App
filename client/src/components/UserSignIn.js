@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Header from './Header';
+import { useData, useUpdateData } from './Context';
 
 const UserSignIn = () => {
     const [inputs, setInputs] = useState({});
-    
+    const [errors, setErrors] = useState([])
+    const { signIn } = useUpdateData();
+    const navigate = useNavigate();
+
+    // const { emailAddress, password } = user
     const handleSubmit = (e) => {
-        if (e){
-            e.preventDefault();
-            e.target.reset();
-        }
+        e.preventDefault();
+        signIn(inputs.emailAddress, inputs.password)
+            .then( authUser => {
+                if ( authUser === null) {
+                    return setErrors('Sign-in was unsuccessful');
+                } else {            
+                    console.log(`Sign-in was SUCCESSFUL!`);
+                }
+            })
+            .catch( err => {
+                console.log(err);
+                navigate('/error');
+            })
+
     }
 
     const handleInputChange = (e) => {
@@ -23,7 +38,7 @@ const UserSignIn = () => {
             <main>
                 <div className="form--centered">
                 <h2>Sign In</h2>
-                <form onSubmit={handleSubmit}>
+                <form errors={errors} onSubmit={handleSubmit}>
                     <label htmlFor="emailAddress">Email Address</label>
                     <input id="emailAddress" name="emailAddress" type="email"  onChange={handleInputChange} value={inputs.emailAddress}/>
                     <label htmlFor="password">Password</label>

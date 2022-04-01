@@ -5,7 +5,7 @@ import React, {
 }from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-
+import { Buffer } from 'buffer';
 import config from './config';
 //create context for variables and functions
 const ResultContext = React.createContext();
@@ -23,13 +23,12 @@ export function useUpdateData() {
 export function ResultProvider({ children }) {
   
 
-  const [list, setList] = useState([]);
-  const [query, setQuery ] = useState('');
-  const location = useLocation();
-//   const [course, setCourse] = useState([]);
+  const [ list, setList ] = useState([]);
+  const [ query, setQuery ] = useState('');
+  const [ user, setUser ] = useState({});
   const { id } = useParams;
   const navigate = useNavigate();
-
+    console.log(user)
 
 
   useEffect( ()=> {
@@ -41,7 +40,7 @@ export function ResultProvider({ children }) {
 
   }, []);
 
-  const api = (path, method = 'GET', body = null) => {
+  const api = (path, method = 'GET', body = null, requiresAuth = false, credentials = null ) => {
     const url = config.apiBaseUrl + path;
   
     const options = {
@@ -55,11 +54,16 @@ export function ResultProvider({ children }) {
       options.body = JSON.stringify(body);
     }
 
+    if (requiresAuth) {
+        const encodedCredentials = Buffer.from(`${credentials.emailAddress}:${credentials.password}`).toString('base64')
+        options.headers['Authorization'] = `Basic ${encodedCredentials}`;
+    }
+
     return fetch(url, options);
   }
 
-  const getUser = async () => {
-    const response = await api(`/users`, 'GET', null);
+  const getUser = async (emailAddress, password) => {
+    const response = await api(`/users`, 'GET', null, true, { emailAddress, password } );
     if (response.status === 200) {
       return response.json().then(data => data);
     }
@@ -86,31 +90,18 @@ export function ResultProvider({ children }) {
     }
   }
 
-    // useEffect( ()=> {
+  const signIn = async (emailAddress, password) => {
+    const user =  await getUser(emailAddress, password);
+    if ( user !== null ) {
+        setUser(user)
+    } else {
+        return user;
+    }
+}
 
-    //     if (query !== '' ){
-    //         const getCourse = async () => {
-    //             const response = await axios.get(`http://localhost:5000/api/courses/${query}`)
-    //             await setCourse(response.data);
-    //           };
-    //           getCourse();
-    //     }
+const   signOut = () => {
 
-    // }, [query]);
-
-
-    // useEffect( ()=> { 
-    //     const urlParam = location.pathname.replace('/courses/', '').replace('/', '').replace('update', '');
-    //     urlParam === '' ? setQuery('') : setQuery(urlParam);
-    // }, [location, query]);
-
-    // useEffect( ()=> { 
-    //     const urlParam = location.pathname
-    //     if(urlParam.includes('update')){
-    //         handleCourseSelect(id)
-    //     }
-
-    // }, [location, id]);
+}
 
     const handleDelete = async (courseId) => {
         const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)
@@ -132,10 +123,12 @@ export function ResultProvider({ children }) {
 
     
     return (
-        <ResultContext.Provider value={{ list, query, id }}>       
-            <ResultUpdateContext.Provider value={{ api, createUser, handleDelete, handleCreate, handleUpdate }}>
+        <ResultContext.Provider value={{ list, id, user }}>       
+            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>
     );
+
+
 }
