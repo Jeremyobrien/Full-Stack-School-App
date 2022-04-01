@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import Header from './Header';
+import { useUpdateData } from './Context';
+
 const UserSignUp = () => {
 
     const [inputs, setInputs] = useState({});
-    
+    const [err, setErr] = useState([]);
+    const { createUser } = useUpdateData();
+    const navigate = useNavigate();
+
     const handleSubmit = (e) => {
-        if (e){
             e.preventDefault();
-            e.target.reset();
+            createUser(inputs)
+                .then( errors => {
+                    if (errors.length) {
+                        setErr(errors)
+                    } else {
+                        console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
+                      }
+                    })
+                .catch( err => {
+                    console.log(err);
+                    navigate('/error');
+                });
         }
-    }
 
     const handleInputChange = (e) => {
         e.persist();

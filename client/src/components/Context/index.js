@@ -5,8 +5,8 @@ import React, {
 }from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-// import { useLocation } from 'react-router-dom';
 
+import config from './config';
 //create context for variables and functions
 const ResultContext = React.createContext();
 const ResultUpdateContext = React.createContext();
@@ -22,8 +22,6 @@ export function useUpdateData() {
 //maintains state of app
 export function ResultProvider({ children }) {
   
-//   const [isLoading, setIsLoading] = useState(true);
-//   const location = useLocation();
 
   const [list, setList] = useState([]);
   const [query, setQuery ] = useState('');
@@ -31,7 +29,9 @@ export function ResultProvider({ children }) {
 //   const [course, setCourse] = useState([]);
   const { id } = useParams;
   const navigate = useNavigate();
-  
+
+
+
   useEffect( ()=> {
         const getCourses = async () => {
         const response = await axios.get('http://localhost:5000/api/courses')
@@ -40,6 +40,51 @@ export function ResultProvider({ children }) {
       getCourses();
 
   }, []);
+
+  const api = (path, method = 'GET', body = null) => {
+    const url = config.apiBaseUrl + path;
+  
+    const options = {
+      method,
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+    };
+
+    if (body !== null) {
+      options.body = JSON.stringify(body);
+    }
+
+    return fetch(url, options);
+  }
+
+  const getUser = async () => {
+    const response = await api(`/users`, 'GET', null);
+    if (response.status === 200) {
+      return response.json().then(data => data);
+    }
+    else if (response.status === 401) {
+      return null;
+    }
+    else {
+      throw new Error();
+    }
+  }
+  
+  const createUser = async (user) => {
+    const response = await api('/users', 'POST', user);
+    if (response.status === 201) {
+      return [];
+    }
+    else if (response.status === 400) {
+      return response.json().then(data => {
+        return data.errors;
+      });
+    }
+    else {
+      throw new Error();
+    }
+  }
 
     // useEffect( ()=> {
 
@@ -88,7 +133,7 @@ export function ResultProvider({ children }) {
     
     return (
         <ResultContext.Provider value={{ list, query, id }}>       
-            <ResultUpdateContext.Provider value={{setQuery, handleDelete, handleCreate, handleUpdate }}>
+            <ResultUpdateContext.Provider value={{ api, createUser, handleDelete, handleCreate, handleUpdate }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>
