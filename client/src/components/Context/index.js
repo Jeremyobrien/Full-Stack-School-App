@@ -4,7 +4,7 @@ import React, {
     useState
 }from 'react';
 import axios from 'axios';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { Route, useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
 import { Buffer } from 'buffer';
 import config from './config';
 //create context for variables and functions
@@ -28,7 +28,7 @@ export function ResultProvider({ children }) {
   const [ user, setUser ] = useState({});
   const { id } = useParams;
   const navigate = useNavigate();
-    console.log(user)
+
 
 
   useEffect( ()=> {
@@ -102,6 +102,7 @@ export function ResultProvider({ children }) {
 const   signOut = () => {
 
 }
+
 
     const handleDelete = async (courseId) => {
         const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)

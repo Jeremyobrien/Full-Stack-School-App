@@ -1,4 +1,4 @@
-import {Routes, Route, Navigate } from 'react-router-dom'
+import {Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { ResultProvider } from './components/Context';
 // import './App.css';
 import Courses from './components/Courses';
@@ -10,6 +10,8 @@ import UserSignIn from './components/UserSignIn';
 import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
 import UnhandledError from './components/UnhandledError';
+import PrivateRoute from './components/PrivateRoute';
+import React from 'react';
 
 function App() {
   return (
@@ -18,9 +20,12 @@ function App() {
         <div>             
               <Routes>
                 <Route path='/' element={ <Courses />} />
-                  <Route path='courses/create' element={<CreateCourse />} />
+        
+                  <PrivateRoute path='courses/create' element={<CreateCourse />} />
                   <Route path='courses/:id' element={ <CourseDetail />} />
-                  <Route path='courses/:id/update' element={<UpdateCourse />} />
+                  <React.Fragment>
+                  <PrivateRoute path='courses/:id/update' element={<UpdateCourse />} />
+                  </React.Fragment>
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />
                   <Route path='signout' element={ <Navigate to={'/'} />} />
