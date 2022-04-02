@@ -21,11 +21,13 @@ function App() {
               <Routes>
                 <Route path='/' element={ <Courses />} />
         
-                  <PrivateRoute path='courses/create' element={<CreateCourse />} />
+                  <Route path='courses/create' element={<PrivateRoute />} >
+                    <Route path='courses/create' element={<CreateCourse />} />
+                  </Route>
                   <Route path='courses/:id' element={ <CourseDetail />} />
-                  <React.Fragment>
-                  <PrivateRoute path='courses/:id/update' element={<UpdateCourse />} />
-                  </React.Fragment>
+                  <Route path='courses/:id/update' element={<PrivateRoute />} >
+                    <Route path='courses/:id/update' element={<UpdateCourse />} />
+                  </Route>
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />
                   <Route path='signout' element={ <Navigate to={'/'} />} />
