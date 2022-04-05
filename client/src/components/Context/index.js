@@ -29,7 +29,7 @@ export function ResultProvider({ children }) {
   const [course, setCourse] = useState();
   const { id } = useParams;
   const navigate = useNavigate();
-console.log(course)
+
 
 
   useEffect( ()=> {

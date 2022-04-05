@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { useUpdateData } from './Context';
 import { NavLink } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
@@ -7,7 +7,7 @@ const UpdateCourse = () => {
     const [inputs, setInputs] = useState(null);
     const { course } =  useOutletContext();
     const { handleUpdate } = useUpdateData();
-    
+
 
     const handleSubmit = (e) => {
         if (e){
