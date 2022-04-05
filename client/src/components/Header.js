@@ -4,7 +4,7 @@ import { useData } from './Context';
 
 const Header = () => {
     const { user } = useData();
-    const {firstName, lastName } = user;
+
 
     return(
         <div>
@@ -28,7 +28,7 @@ const Header = () => {
                     {
                         user ?
                             <React.Fragment>
-                                <span>Welcome, {firstName} {lastName}{' '}</span>
+                                <span>Welcome, {user.firstName} {user.lastName}{' '}</span>
                                 
                                 <NavLink to={'/signout'}>Sign Out</NavLink>
                             </React.Fragment>

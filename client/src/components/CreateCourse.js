@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import { useUpdateData } from './Context';
+import { useData, useUpdateData } from './Context';
 import { NavLink } from 'react-router-dom';
 import Header from './Header';
-const CreateCourse = (callback) => {
-    const [inputs, setInputs] = useState({});
 
+const CreateCourse = () => {
+    const [inputs, setInputs] = useState({});
     const { handleCreate } = useUpdateData();
-    
+    const { user } = useData();
+
     const handleSubmit = (e) => {
         if (e){
             e.preventDefault();
@@ -36,10 +37,10 @@ const CreateCourse = (callback) => {
                   <div className="main--flex">
                     <div>
                       <label htmlFor="courseTitle">Course Title</label>
-                      <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.courseTitle}  />
-                      <p>By Joe Smith</p>
+                      <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.title}  />
+                      <p>By {user.firstName} {user.lastName}</p>
                       <label htmlFor="courseDescription">Course Description</label>
-                      <textarea id="courseDescription" name="courseDescription" onChange={handleInputChange} value={inputs.courseDescription} defaultValue={""} />
+                      <textarea id="courseDescription" name="courseDescription" onChange={handleInputChange} value={inputs.description} defaultValue={""} />
                     </div>
                     <div>
                       <label htmlFor="estimatedTime">Estimated Time</label>

@@ -20,13 +20,12 @@ function App() {
         <div>             
               <Routes>
                 <Route path='/' element={ <Courses />} />
-        
                   <Route path='courses/create' element={<PrivateRoute />} >
-                    <Route path='courses/create' element={<CreateCourse />} />
+                    <Route element={<CreateCourse />} />
                   </Route>
                   <Route path='courses/:id' element={ <CourseDetail />} />
                   <Route path='courses/:id/update' element={<PrivateRoute />} >
-                    <Route path='courses/:id/update' element={<UpdateCourse />} />
+                    <Route element={<UpdateCourse />} />
                   </Route>
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />

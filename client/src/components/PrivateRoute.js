@@ -1,12 +1,12 @@
 import React from 'react'
-import {Navigate, Outlet} from 'react-router-dom';
+import {Navigate, Outlet, useOutletContext} from 'react-router-dom';
 import {useData} from './Context';
+import UpdateCourse from './UpdateCourse';
 
 const PrivateRoute = () => {
-    const { user } = useData();
-    console.log(user)
+    const { user, course } = useData();
     return ( 
-        user !== null ? <Outlet /> : <Navigate to={'/signin'}/>
+        user ? <Outlet context={course} /> : <Navigate to={'/signin'}/>
     );
   };
 

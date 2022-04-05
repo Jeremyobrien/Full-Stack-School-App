@@ -5,7 +5,7 @@ import { useData, useUpdateData } from './Context';
 
 const UserSignIn = () => {
     const [inputs, setInputs] = useState({});
-    const [errors, setErrors] = useState([])
+    const [errors, setErrors] = useState([]);
     const { signIn } = useUpdateData();
     const navigate = useNavigate();
 
@@ -18,6 +18,7 @@ const UserSignIn = () => {
                     return setErrors('Sign-in was unsuccessful');
                 } else {            
                     console.log(`Sign-in was SUCCESSFUL!`);
+                    navigate('/');
                 }
             })
             .catch( err => {
@@ -49,7 +50,6 @@ const UserSignIn = () => {
                 </div>
             </main>
         </div>
-
     );
 
 }

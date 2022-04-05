@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { NavLink, Outlet, useParams, useLocation, Route, Routes } from 'react-router-dom';
+import { NavLink, Outlet, useParams, useLocation, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
 import { useData, useUpdateData } from './Context';
 import axios from 'axios';
 import Header from './Header';
@@ -12,12 +12,12 @@ import CourseSpecs from './CourseSpecs';
 const CourseDetail = () => {
     
     const {query } = useData();
-    const {handleDelete, handleUpdate } = useUpdateData();
+    const {handleDelete, handleCourseUpdate} = useUpdateData();
     const [course, setCourse] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdate, setIsUpdate] = useState(false);
     const { id } = useParams();
-
+    const navigate = useNavigate();
 
     useEffect( ()=> {
 
@@ -31,9 +31,14 @@ const CourseDetail = () => {
 
     }, [id]);
 
+    useEffect( ()=> {
+    handleCourseUpdate(course)
+    }, [course]);
+
+
 
     const handleUpdateReq = () => {
-        setIsUpdate(true)
+        return navigate('update')
     }
 
 
@@ -41,17 +46,10 @@ return (
     isLoading ?
     <h2>Loading...</h2>
     :
-    isUpdate ?
-        <div id="root">
-        <Header />
-        <UpdateCourse course={course}  />
-        </div>
-    :
     <div id="root">
         <Header />
         <CourseSpecs course={course} handleUpdateReq={handleUpdateReq} handleDelete={handleDelete} />
-        </div>
-
+    </div>
     );
 
 }

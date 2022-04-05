@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 
 
 const CourseSpecs = (props) =>{
     const { id } = useParams();
+    const navigate = useNavigate();
     return (
         <main>
             <div className="actions--bar">
             <div className="wrap">
-                <button className="button" onClick={ () => props.handleUpdateReq()}>Update Course</button>
+                <button className="button" onClick={ () => navigate('update') }>Update Course</button>
                 <button className="button" onClick={ () => props.handleDelete(id)}>Delete Course</button>
                 <NavLink to={"/"} className="button button-secondary">Return to List</NavLink>
             </div>

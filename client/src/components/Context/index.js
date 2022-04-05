@@ -25,10 +25,11 @@ export function ResultProvider({ children }) {
 
   const [ list, setList ] = useState([]);
   const [ query, setQuery ] = useState('');
-  const [ user, setUser ] = useState({});
+  const [ user, setUser ] = useState(null);
+  const [course, setCourse] = useState();
   const { id } = useParams;
   const navigate = useNavigate();
-
+console.log(course)
 
 
   useEffect( ()=> {
@@ -103,6 +104,9 @@ const   signOut = () => {
 
 }
 
+const handleCourseUpdate = (res) => {
+        return setCourse(res)
+}
 
     const handleDelete = async (courseId) => {
         const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)
@@ -124,8 +128,8 @@ const   signOut = () => {
 
     
     return (
-        <ResultContext.Provider value={{ list, id, user }}>       
-            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate }}>
+        <ResultContext.Provider value={{ list, id, user, course }}>       
+            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate, handleCourseUpdate }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>
