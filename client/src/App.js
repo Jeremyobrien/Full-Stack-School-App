@@ -24,9 +24,9 @@ function App() {
                     <Route element={<CreateCourse />} />
                   </Route>
                   <Route path='courses/:id' element={ <CourseDetail />} />
-                  <Route path='courses/:id/update' element={<PrivateRoute />} >
-                    <Route element={<UpdateCourse />} />
-                  </Route>
+                    <Route path='courses/:id/update' element={<PrivateRoute />} >
+                      <Route element={<UpdateCourse />} />
+                    </Route>
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />
                   <Route path='signout' element={ <Navigate to={'/'} />} />

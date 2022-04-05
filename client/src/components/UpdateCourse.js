@@ -8,6 +8,7 @@ const UpdateCourse = () => {
     const { course } =  useOutletContext();
     const { handleUpdate } = useUpdateData();
     
+
     const handleSubmit = (e) => {
         if (e){
             e.preventDefault();
@@ -46,7 +47,6 @@ const UpdateCourse = () => {
             </div>
         </main>
     );
-
 }
 
 export default UpdateCourse;

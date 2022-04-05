@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import { useData, useUpdateData } from './Context';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useOutletContext } from 'react-router-dom';
 import Header from './Header';
 
 const CreateCourse = () => {
     const [inputs, setInputs] = useState({});
     const { handleCreate } = useUpdateData();
-    const { user } = useData();
+    const [ user ]  = useOutletContext();
 
     const handleSubmit = (e) => {
         if (e){
