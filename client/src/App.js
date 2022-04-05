@@ -29,7 +29,7 @@ function App() {
                   </Route>
                   <Route path='signin' element={ <UserSignIn />} />
                   <Route path='signup' element={ <UserSignUp />} />
-                  <Route path='signout' element={ <Navigate to={'/'} />} />
+                  <Route path='signout' element={ <UserSignOut />} />
                   <Route path='error' element={<UnhandledError />} />
                 <Route path="*" element={ <NotFound />} />
               </Routes>

@@ -31,7 +31,6 @@ export function ResultProvider({ children }) {
   const navigate = useNavigate();
 
 
-
   useEffect( ()=> {
         const getCourses = async () => {
         const response = await axios.get('http://localhost:5000/api/courses')
@@ -101,7 +100,7 @@ export function ResultProvider({ children }) {
 }
 
 const   signOut = () => {
-
+    setUser(null);
 }
 
 const handleCourseUpdate = (res) => {
@@ -129,7 +128,7 @@ const handleCourseUpdate = (res) => {
     
     return (
         <ResultContext.Provider value={{ list, id, user, course }}>       
-            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate, handleCourseUpdate }}>
+            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate, handleCourseUpdate, signOut }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>

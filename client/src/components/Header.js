@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom'
-import { useData } from './Context';
+import { useData, useUpdateData } from './Context';
 
 const Header = () => {
     const { user } = useData();
-
+    const { signOut } = useUpdateData();
 
     return(
         <div>
