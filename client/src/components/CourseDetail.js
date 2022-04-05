@@ -13,7 +13,7 @@ const CourseDetail = () => {
     
     const {query } = useData();
     const {handleDelete, handleCourseUpdate} = useUpdateData();
-    const [course, setCourse] = useState([]);
+    const [course, setCourse] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdate, setIsUpdate] = useState(false);
     const { id } = useParams();

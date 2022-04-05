@@ -1,19 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import { useUpdateData } from './Context';
-import { NavLink } from 'react-router-dom';
+import { Navigate, NavLink, useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 
 const UpdateCourse = () => {
-    const [inputs, setInputs] = useState(null);
+    const [inputs, setInputs] = useState({});
     const { course } =  useOutletContext();
     const { handleUpdate } = useUpdateData();
-
+   
 
     const handleSubmit = (e) => {
-        if (e){
             e.preventDefault();
             handleUpdate(inputs)
-        }
     }
 
     const handleInputChange = (e) => {
@@ -29,8 +27,8 @@ const UpdateCourse = () => {
                 <div className="main--flex">
                 <div>
                     <label htmlFor="courseTitle">Course Title</label>
-                    <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.courseTitle} defaultValue={course.title} />
-                    <p>By {course.useInfo.firstName} {course.userInfo.lastName}</p>
+                    <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.title} defaultValue={course.title} />
+                    <p>By {course.userInfo.firstName} {course.userInfo.lastName}</p>
                     <label htmlFor="courseDescription">Course Description</label>
                     <textarea id="courseDescription" name="courseDescription" onChange={handleInputChange} value={inputs.courseDescription} defaultValue={course.description} />
                 </div>

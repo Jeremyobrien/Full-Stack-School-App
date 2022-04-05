@@ -6,7 +6,7 @@ import Header from './Header';
 const CreateCourse = () => {
     const [inputs, setInputs] = useState({});
     const { handleCreate } = useUpdateData();
-    const [ user ]  = useOutletContext();
+    const { user }  = useOutletContext();
 
     const handleSubmit = (e) => {
         if (e){

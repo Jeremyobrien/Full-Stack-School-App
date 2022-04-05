@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { users } = require('../seed/data.json')
 const { User } = require('../models')
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const { authenticateUser } = require('../middleware/auth-user');
 const { check, validationResult } = require('express-validator');
 
