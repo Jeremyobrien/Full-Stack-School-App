@@ -70,14 +70,14 @@ router.post('/', authenticateUser, [
 
 //allows authenticated users to update course information
 router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
-    if ( !req.body.title || !req.body.description) {
+    if ( !req.body.courseTitle || !req.body.courseDescription) {
         res.status(400).json({ message: '"Title" and "Description" values required'})
     } else {
     const user = await req.currentUser;
     const course = await Course.findByPk(req.params.id);
     if (course && user.id === course.userId) {
-        course.title = req.body.title;
-        course.description = req.body.description;
+        course.title = req.body.courseTitle;
+        course.description = req.body.courseDescription;
         course.estimatedTime = req.body.estimatedTime;
         course.materialsNeeded = req.body.materialsNeeded;
         course.userId = req.body.userId;
