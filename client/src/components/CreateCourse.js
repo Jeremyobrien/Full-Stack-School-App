@@ -9,10 +9,8 @@ const CreateCourse = () => {
     const { user }  = useOutletContext();
 
     const handleSubmit = (e) => {
-        if (e){
             e.preventDefault();
             handleCreate(inputs)
-        }
     }
 
     const handleInputChange = (e) => {
@@ -21,7 +19,7 @@ const CreateCourse = () => {
       }
 
     return (
-      <div>
+      <>
         <Header />
         <main>
               <div className="wrap">
@@ -36,11 +34,11 @@ const CreateCourse = () => {
                 <form onSubmit={handleSubmit}>
                   <div className="main--flex">
                     <div>
-                      <label htmlFor="courseTitle">Course Title</label>
-                      <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.title}  />
+                      <label htmlFor="title">Course Title</label>
+                      <input id="courseTitle" name="title" type="text" onChange={handleInputChange} value={inputs.title}  />
                       <p>By {user.firstName} {user.lastName}</p>
-                      <label htmlFor="courseDescription">Course Description</label>
-                      <textarea id="courseDescription" name="courseDescription" onChange={handleInputChange} value={inputs.description} defaultValue={""} />
+                      <label htmlFor="description">Course Description</label>
+                      <textarea id="courseDescription" name="description" onChange={handleInputChange} value={inputs.description} defaultValue={""} />
                     </div>
                     <div>
                       <label htmlFor="estimatedTime">Estimated Time</label>
@@ -54,8 +52,7 @@ const CreateCourse = () => {
                 </form>
               </div>
             </main>
-      </div>
-
+      </>
     );
 
 }

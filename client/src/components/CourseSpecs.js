@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import { NavLink, useNavigate, useParams } from 'react-router-dom';
-
+import { useData } from './Context';
 
 const CourseSpecs = (props) =>{
     const { id } = useParams();
     const navigate = useNavigate();
+    const { user } = useData();
     return (
         <main>
+        { user ? 
             <div className="actions--bar">
             <div className="wrap">
                 <button className="button" onClick={ () => navigate('update') }>Update Course</button>
@@ -15,6 +17,13 @@ const CourseSpecs = (props) =>{
                 <NavLink to={"/"} className="button button-secondary">Return to List</NavLink>
             </div>
             </div>
+            :
+            <div className="actions--bar">
+            <div className="wrap">
+                <NavLink to={"/"} className="button button-secondary">Return to List</NavLink>
+            </div>
+            </div>
+        }
             <div className="wrap">
             <h2>Course Detail</h2>
             <form>

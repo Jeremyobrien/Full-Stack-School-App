@@ -50,37 +50,39 @@ router.post('/', authenticateUser, [
 ], asyncHandler(async (req, res)=> {
     const errors = validationResult(req);
     const data = req.body;
+
     if ( !errors.isEmpty()) {
       const errorMessages = errors.array().map( error => error.msg);
       res.status(400).json({ errors: errorMessages });
     }
         const course = await Course.create({
-            title: data.title,
-            description: data.description,
-            estimatedTime: data.estimatedTime,
-            materialsNeeded: data.materialsNeeded,
-            userId: data.userId
+            title: data.course.title,
+            description: data.course.description,
+            estimatedTime: data.course.estimatedTime,
+            materialsNeeded: data.course.materialsNeeded,
+            userId: data.id.id
         });
+        console.log(course.toJSON());
         if (course) {
             await res.status(201)
-                     .location(`/${course.id}`)
-                     .end();
+                    .location(`/${course.id}`)
+                    .end();
         }
 }));
 
 //allows authenticated users to update course information
 router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
-    if ( !req.body.courseTitle || !req.body.courseDescription) {
+    if ( !req.body.course.title || !req.body.course.description) {
         res.status(400).json({ message: '"Title" and "Description" values required'})
     } else {
     const user = await req.currentUser;
     const course = await Course.findByPk(req.params.id);
     if (course && user.id === course.userId) {
-        course.title = req.body.courseTitle;
-        course.description = req.body.courseDescription;
-        course.estimatedTime = req.body.estimatedTime;
-        course.materialsNeeded = req.body.materialsNeeded;
-        course.userId = req.body.userId;
+        course.title = req.body.course.title;
+        course.description = req.body.course.description;
+        course.estimatedTime = req.body.course.estimatedTime;
+        course.materialsNeeded = req.body.course.materialsNeeded;
+        course.userId = req.body.id.id;
         await course.save();
         res.status(204).end();
     } else {

@@ -12,7 +12,7 @@ import CourseSpecs from './CourseSpecs';
 const CourseDetail = () => {
     
     const {query } = useData();
-    const {handleDelete, handleCourseUpdate} = useUpdateData();
+    const {handleDelete, changeCourse} = useUpdateData();
     const [course, setCourse] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isUpdate, setIsUpdate] = useState(false);
@@ -32,7 +32,7 @@ const CourseDetail = () => {
     }, [id]);
 
     useEffect( ()=> {
-    handleCourseUpdate(course)
+    changeCourse(course)
     }, [course]);
 
 
