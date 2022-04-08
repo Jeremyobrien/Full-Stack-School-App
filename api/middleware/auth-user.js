@@ -7,11 +7,10 @@ const { User } = require('../models');
 exports.authenticateUser = async (req, res, next) => {
   let message;
   const credentials = auth(req);
-  console.log(credentials)
   if (credentials) {
     const user = await User.findOne({ where: {emailAddress: credentials.name } });
     if (user) {
-        const authenticated = bcrypt.compare(credentials.pass, user.password);
+        const authenticated = await bcrypt.compare(credentials.pass, user.password);
         if (authenticated) {
             console.log(`Authentication successful for username: ${user.emailAddress}`);
             // Store the user on the Request object.

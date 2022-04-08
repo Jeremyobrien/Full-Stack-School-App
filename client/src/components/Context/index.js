@@ -7,7 +7,6 @@ import axios from 'axios';
 import { Route, useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
 import { Buffer } from 'buffer';
 import config from './config';
-import { encode } from 'punycode';
 //create context for variables and functions
 const ResultContext = React.createContext();
 const ResultUpdateContext = React.createContext();
@@ -27,10 +26,10 @@ export function ResultProvider({ children }) {
   const [ list, setList ] = useState([]);
   const [ query, setQuery ] = useState('');
   const [ user, setUser ] = useState(null);
-  const [course, setCourse] = useState({});
+  const [course, setCourse] = useState();
+  const { id } = useParams;
   const navigate = useNavigate();
-  const { id } = useParams();
-  const [ isDeleted, setIsDeleted ] = useState(false);
+
 
   useEffect( ()=> {
         const getCourses = async () => {
@@ -61,18 +60,6 @@ export function ResultProvider({ children }) {
     }
 
     return fetch(url, options);
-  }
-
-  const encodeAuth = (credentials) => {
-    const options = {
-      headers: {
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-    };
-    const encodedCredentials = Buffer.from(`${credentials.emailAddress}:${credentials.password}`).toString('base64')
-    options.headers['Authorization'] = `Basic ${encodedCredentials}`;
-  
-    return options;
   }
 
 
@@ -107,90 +94,43 @@ export function ResultProvider({ children }) {
   const signIn = async (emailAddress, password) => {
     const user =  await getUser(emailAddress, password);
     if ( user !== null ) {
+        user.password = password
         setUser(user)
     } else {
-        return user;
+        return;
     }
 }
 
-const signOut = () => {
+const   signOut = () => {
     setUser(null);
 }
 
-const changeCourse = (newCourse) => {
-  return setCourse(newCourse)
-}
-
-const handleCourseUpdate = async (changes, courseId) => {
-
-  const { emailAddress, password } = user;
-  const userId = user.id;
-  const response = await api(`/courses/${courseId}`, 'PUT', {course:changes, id:userId}, true, {emailAddress, password });
-  if (response.status === 201) {
-    return [];
-  }
-  else if (response.status === 400) {
-    return response.json().then(data => {
-     return data;
-    });
-  }
-  else {
-    throw new Error();
-  }
+const handleCourseUpdate = (res) => {
+        return setCourse(res)
 }
 
     const handleDelete = async (courseId) => {
-        const credentials = {
-          username: user.emailAddress,
-          password: user.password
-        }
-        const encodedCredentials = Buffer.from(`${credentials.username}:${credentials.password}`).toString('base64')
-        const headers = {
-          'Authorization': `Basic ${encodedCredentials}`
-        }
-        const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`, { headers })
-                          .then( res => { setIsDeleted(true)})
-                          .then( console.log(isDeleted))
+        const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)
         setList(res);
         navigate('/');
     }
 
     const handleCreate = async (newCourse) => {
-
-      const { emailAddress, password, id } = user;
-
-      // const encodedAuth = await encodeAuth(credentials);
-      //   await axios.post('http://localhost:5000/api/courses/', { data:{newCourse}}, encodedAuth)
-      //                           .catch(error => { console.log(`shit ${error.message}`)})
-      //   navigate('/');
-      const response = await api('/courses', 'POST', {course:newCourse, id:id}, true, {emailAddress, password });
-      if (response.status === 201) {
-        return [];
-      }
-      else if (response.status === 400) {
-        return response.json().then(data => {
-         return data;
-        });
-      }
-      else {
-        throw new Error();
-      }
+        const res = await axios.post('http://localhost:5000/api/courses/', newCourse )
+        setList(res)
+        navigate('/')
     }
 
-    // const addToList = () => {
-    //   const newList = await getCourses()
-    // }
-
-    // const handleUpdate = async (updatedCourse) => {
-    //     const res = await axios.put(`http://localhost:5000/api/courses/${id}`, updatedCourse)
-    //     setList(res)
-    //     navigate('/')
-    // }
+    const handleUpdate = async (updatedCourse, emailAddress, password) => {
+        const res = await api(`/courses/${updatedCourse.id}`, 'PUT', updatedCourse, true, { emailAddress, password } )
+        setList(res)
+        navigate('/')
+    }
 
     
     return (
         <ResultContext.Provider value={{ list, id, user, course }}>       
-            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, changeCourse, signOut, handleCourseUpdate }}>
+            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate, handleCourseUpdate, signOut }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>
