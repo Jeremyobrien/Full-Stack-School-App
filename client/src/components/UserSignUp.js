@@ -14,7 +14,7 @@ const UserSignUp = () => {
             e.preventDefault();
             createUser(inputs)
                 .then( errors => {
-                    if (errors.length) {
+                    if (errors) {
                         setErr(errors)
                     } else {
                         console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)

@@ -75,21 +75,6 @@ export function ResultProvider({ children }) {
     }
   }
   
-  const createUser = async (user) => {
-    const response = await api('/users', 'POST', user);
-    if (response.status === 201) {
-      return [];
-    }
-    else if (response.status === 400) {
-      return response.json().then(data => {
-        return data.errors;
-      });
-    }
-    else {
-      throw new Error();
-    }
-  }
-
   const signIn = async (emailAddress, password) => {
     const user =  await getUser(emailAddress, password);
     if ( user !== null ) {
@@ -102,6 +87,23 @@ export function ResultProvider({ children }) {
 
 const   signOut = () => {
     setUser(null);
+}
+
+const createUser = async (user) => {
+  const response = await api('/users', 'POST', user);
+  if (response.status === 201) {
+    setUser(user);
+    await signIn(user.emailAddress, user.password)
+    navigate('/')
+  }
+  else if (response.status === 400) {
+    return response.json().then(data => {
+      return data.errors;
+    });
+  }
+  else {
+    throw new Error();
+  }
 }
 
 const handleCourseUpdate = (res) => {

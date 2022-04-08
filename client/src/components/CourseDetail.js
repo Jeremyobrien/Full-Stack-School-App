@@ -5,9 +5,7 @@ import { useData, useUpdateData } from './Context';
 import axios from 'axios';
 import Header from './Header';
 import ReactMarkdown from 'react-markdown';
-import NotFound from './NotFound';
-import UpdateCourse from './UpdateCourse';
-import CourseSpecs from './CourseSpecs';
+
 
 const CourseDetail = () => {
     const { user } = useData();
