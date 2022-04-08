@@ -4,13 +4,15 @@ import { NavLink, useOutletContext } from 'react-router-dom';
 import Header from './Header';
 
 const CreateCourse = () => {
-    const [inputs, setInputs] = useState({});
-    const { handleCreate } = useUpdateData();
     const { user }  = useOutletContext();
+    const [inputs, setInputs] = useState({courseTitle: null, courseDescription: null, estimatedTime: null, materialsNeeded: null, userId: user.id });
+    const { handleCreate } = useUpdateData();
+
 
     const handleSubmit = (e) => {
             e.preventDefault();
-            handleCreate(inputs)
+
+            handleCreate(inputs, user.emailAddress, user.password)
     }
 
     const handleInputChange = (e) => {
@@ -35,10 +37,10 @@ const CreateCourse = () => {
                   <div className="main--flex">
                     <div>
                       <label htmlFor="title">Course Title</label>
-                      <input id="courseTitle" name="title" type="text" onChange={handleInputChange} value={inputs.title}  />
+                      <input id="courseTitle" name="courseTitle" type="text" onChange={handleInputChange} value={inputs.courseTitle}  />
                       <p>By {user.firstName} {user.lastName}</p>
-                      <label htmlFor="description">Course Description</label>
-                      <textarea id="courseDescription" name="description" onChange={handleInputChange} value={inputs.description} defaultValue={""} />
+                      <label htmlFor="courseDescription">Course Description</label>
+                      <textarea id="courseDescription" name="courseDescription" onChange={handleInputChange} value={inputs.courseDescription} defaultValue={""} />
                     </div>
                     <div>
                       <label htmlFor="estimatedTime">Estimated Time</label>

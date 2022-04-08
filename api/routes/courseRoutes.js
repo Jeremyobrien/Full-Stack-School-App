@@ -41,10 +41,10 @@ router.get('/:id', asyncHandler(async (req, res) =>{
 
 //Allows authenticated users to create a new course
 router.post('/', authenticateUser, [
-    check('title')
+    check('courseTitle')
         .exists()
         .withMessage('Please provide a value for "title"'),
-    check('description')
+    check('courseDescription')
         .exists()
         .withMessage('Please provide a value for "description"')
 ], asyncHandler(async (req, res)=> {
@@ -55,8 +55,8 @@ router.post('/', authenticateUser, [
       res.status(400).json({ errors: errorMessages });
     }
         const course = await Course.create({
-            title: data.title,
-            description: data.description,
+            title: data.courseTitle,
+            description: data.courseDescription,
             estimatedTime: data.estimatedTime,
             materialsNeeded: data.materialsNeeded,
             userId: data.userId

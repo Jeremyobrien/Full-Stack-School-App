@@ -1,9 +1,7 @@
 import React, { useData } from './Context';
 import { NavLink, Routes, Route } from 'react-router-dom';
 import Header from './Header';
-import CourseDetail from './CourseDetail';
-import UpdateCourse from './UpdateCourse';
-import CreateCourse from './CreateCourse';
+
 
 const Courses = () => {
     

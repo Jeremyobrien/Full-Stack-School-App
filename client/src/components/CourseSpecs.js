@@ -6,14 +6,15 @@ import { useData } from './Context';
 const CourseSpecs = (props) =>{
     const { id } = useParams();
     const navigate = useNavigate();
-    const { user } = useData();
+
+    console.log(props.user)
     return (
         <main>
-        { user ? 
+        { props.user ? 
             <div className="actions--bar">
             <div className="wrap">
                 <button className="button" onClick={ () => navigate('update') }>Update Course</button>
-                <button className="button" onClick={ () => props.handleDelete(id)}>Delete Course</button>
+                <button className="button" onClick={ () => props.handleDelete(id, props.user.emailAddress, props.user.password)}>Delete Course</button>
                 <NavLink to={"/"} className="button button-secondary">Return to List</NavLink>
             </div>
             </div>

@@ -24,21 +24,20 @@ export function ResultProvider({ children }) {
   
 
   const [ list, setList ] = useState([]);
-  const [ query, setQuery ] = useState('');
   const [ user, setUser ] = useState(null);
   const [course, setCourse] = useState();
   const { id } = useParams;
   const navigate = useNavigate();
 
 
-  useEffect( ()=> {
-        const getCourses = async () => {
-        const response = await axios.get('http://localhost:5000/api/courses')
-        setList(response.data);
-      };
+  useEffect( ()=> {   
       getCourses();
-
   }, []);
+
+  const getCourses = async () => {
+    const response = await axios.get('http://localhost:5000/api/courses')
+    setList(response.data);
+  };
 
   const api = (path, method = 'GET', body = null, requiresAuth = false, credentials = null ) => {
     const url = config.apiBaseUrl + path;
@@ -109,22 +108,22 @@ const handleCourseUpdate = (res) => {
         return setCourse(res)
 }
 
-    const handleDelete = async (courseId) => {
-        const res = await axios.delete(`http://localhost:5000/api/courses/${courseId}`)
-        setList(res);
+    const handleDelete = async (courseId, emailAddress, password) => {
+        await api(`/courses/${courseId}`, 'DELETE', {}, true, { emailAddress, password } )
+        await getCourses();
         navigate('/');
     }
 
-    const handleCreate = async (newCourse) => {
-        const res = await axios.post('http://localhost:5000/api/courses/', newCourse )
-        setList(res)
-        navigate('/')
+    const handleCreate = async (newCourse, emailAddress, password) => {
+        await api(`/courses`, 'POST', newCourse, true, { emailAddress, password } )
+        await getCourses();
+        navigate('/');
     }
 
     const handleUpdate = async (updatedCourse, emailAddress, password) => {
-        const res = await api(`/courses/${updatedCourse.id}`, 'PUT', updatedCourse, true, { emailAddress, password } )
-        setList(res)
-        navigate('/')
+        await api(`/courses/${updatedCourse.id}`, 'PUT', updatedCourse, true, { emailAddress, password } )
+        await getCourses();
+        navigate('/');
     }
 
     

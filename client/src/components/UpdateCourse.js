@@ -9,21 +9,19 @@ const UpdateCourse = () => {
     const { user } = useOutletContext();
     const [inputs, setInputs] = useState({id:course.id,});
     const { handleUpdate } = useUpdateData();
-    // emailAddress: course.userInfo.emailAddress,
-    // password:course.userInfo.password
+
 
     const handleSubmit =  (e) => {
 
         e.preventDefault();
         
             if (!inputs.courseTitle && (course.title !== '')) {
-            setInputs(inputs.courseTitle = course.title)
+                setInputs(inputs.courseTitle = course.title)
             } else if (!inputs.courseDescription && (course.description !== '')){
                 setInputs(inputs.courseDescription = course.description)
             }
    
             handleUpdate(inputs, user.emailAddress, user.password)
-
     }
 
 
