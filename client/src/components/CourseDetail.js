@@ -47,7 +47,7 @@ return (
     :
     <main>
     <Header />
-     { authUser ? 
+     { authUser && authUser.id === course.userId ? 
         <div className="actions--bar">
         <div className="wrap">
             <button className="button" onClick={ () => navigate('update') }>Update Course</button>

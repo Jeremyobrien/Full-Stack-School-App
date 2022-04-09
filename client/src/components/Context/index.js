@@ -106,9 +106,9 @@ const createUser = async (user) => {
   }
 }
 
-const handleCourseUpdate = (res) => {
-        return setCourse(res)
-}
+    const handleCourseUpdate = (res) => {
+              return setCourse(res)
+      }
 
     const handleDelete = async (courseId, emailAddress, password) => {
         await api(`/courses/${courseId}`, 'DELETE', {}, true, { emailAddress, password } )
