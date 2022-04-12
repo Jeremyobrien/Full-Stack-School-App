@@ -13,17 +13,17 @@ const UserSignUp = () => {
     const handleSubmit = (e) => {
             e.preventDefault();
             createUser(inputs)
-                .then( errors => {
-                    if (errors) {
-                        setErr(errors)
-                    } else {
-                        console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
-                      }
-                    })
-                .catch( err => {
-                    console.log(err);
-                    navigate('/error');
-                });
+                // .then( errors => {
+                //     if (errors) {
+                //         setErr(errors)
+                //     } else {
+                //         console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
+                //       }
+                //     })
+                // .catch( err => {
+                //     console.log(err);
+                //     navigate('/error');
+                // });
         }
 
     const handleInputChange = (e) => {

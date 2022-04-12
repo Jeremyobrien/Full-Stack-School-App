@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Course, User } = require('../models');
-const { check, validationResult } = require('express-validator');
+const { body,check, validationResult } = require('express-validator');
 const { authenticateUser } = require('../middleware/auth-user');
 
 //Handles requests and passes errors to global handler
@@ -40,20 +40,20 @@ router.get('/:id', asyncHandler(async (req, res) =>{
 }));
 
 //Allows authenticated users to create a new course
-router.post('/', authenticateUser, [
+router.post('/', authenticateUser,[
     check('courseTitle')
-        .exists()
+        .exists({ checkNull: true, checkFalsy: true})
         .withMessage('Please provide a value for "title"'),
     check('courseDescription')
-        .exists()
+        .exists({ checkNull: true, checkFalsy: true})
         .withMessage('Please provide a value for "description"')
 ], asyncHandler(async (req, res)=> {
     const errors = validationResult(req);
     const data = req.body;
-    if ( !errors.isEmpty()) {
+    if (!errors.isEmpty()) {
       const errorMessages = errors.array().map( error => error.msg);
-      res.status(400).json({ errors: errorMessages });
-    }
+      res.status(400).json(errorMessages);
+    }         
         const course = await Course.create({
             title: data.courseTitle,
             description: data.courseDescription,
@@ -71,7 +71,7 @@ router.post('/', authenticateUser, [
 //allows authenticated users to update course information
 router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
     if ( !req.body.courseTitle || !req.body.courseDescription) {
-        res.status(400).json({ message: '"Title" and "Description" values required'})
+        res.status(400).json( ['"Title" and "Description" values required'])
     } else {
     const user = await req.currentUser;
     const course = await Course.findByPk(req.params.id);
@@ -83,7 +83,7 @@ router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
         await course.save();
         res.status(204).end();
     } else {
-        res.status(403).json({ message: "You are not authorized to update this course information"});
+        res.status(403).json(["You are not authorized to update this course information"]);
     }
 }
 }))
@@ -96,7 +96,7 @@ router.delete('/:id', authenticateUser, asyncHandler( async (req, res) => {
         await course.destroy();
         res.status(204).end();
     } else {
-        res.status(403).json({ message: "You are not authorized to delete this course"})
+        res.status(403).json(["You are not authorized to delete this course"])
     }
 }));
 
