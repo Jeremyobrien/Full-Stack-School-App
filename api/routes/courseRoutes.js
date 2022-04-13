@@ -80,6 +80,7 @@ router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
         course.description = req.body.courseDescription;
         course.estimatedTime = req.body.estimatedTime;
         course.materialsNeeded = req.body.materialsNeeded;
+        course.id = req.body.id;
         await course.save();
         res.status(204).end();
     } else {

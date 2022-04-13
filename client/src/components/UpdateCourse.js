@@ -7,42 +7,25 @@ import Header from './Header';
 const UpdateCourse = () => {
     const { course } =  useOutletContext();
     const { user } = useOutletContext();
-    const [inputs, setInputs] = useState({id:course.id,});
-    const [courseTitle, setCourseTitle] = useState({courseTitle: course.title})
-    const [courseDescription, setCourseDescription] = useState({courseDescription: course.description})
+    const [inputs, setInputs] = useState({
+        courseTitle: course.title, 
+        courseDescription: course.description,
+        id:course.id
+    });
     const [errors, setErrors] = useState([]);
     const { handleUpdate } = useUpdateData();
     const navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (errors)
-    //     setErrors([]);
-    // },[])
-
-    const createReq = (formData) => {
-        if (!formData.courseTitle || formData.courseTitle === course.title) {
-            setInputs(formData.courseTitle = course.title)
-        } else if (!formData.courseDescription || formData.courseDescription === course.description){
-            setInputs(formData.courseDescription = course.description)
-        } else if (formData.courseTitle !== course.title) {
-            setInputs(formData.courseTitle)
-        } else if (formData.courseDescription !== course.description){
-            setInputs(formData.courseDescription)
-        }
-        return formData;
-    }
 
     const checkErrors = async (err) => {
-        if( err.length) {
-            setErrors([])
-            console.log(errors)
+        if(err) {
+            return setErrors('');
         }   
     }
 
     const handleSubmit =  async (e) => {
             e.preventDefault();
             await checkErrors(errors)
-            await createReq(inputs);
             await handleUpdate(inputs, user.emailAddress, user.password)
                     .then( err => {
                     if (err.length) {
@@ -51,8 +34,8 @@ const UpdateCourse = () => {
                     return;
                     }})
                 .catch(err => {
-                    // console.log(err)
-                    navigate('/error');
+                    console.log(err)
+                    // navigate('/error');
                 })
 
     }
