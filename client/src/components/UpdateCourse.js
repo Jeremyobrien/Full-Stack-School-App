@@ -59,7 +59,7 @@ const UpdateCourse = () => {
                     <div className="validation--errors">
                       <h3>Validation Errors</h3>
                       <ul>
-                        {<li>{errors}</li>}
+                        {errors.map((err, index) => <li key={index}>{err}</li>)}
                       </ul>
                     </div>
                   </div>

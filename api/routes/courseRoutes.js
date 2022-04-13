@@ -70,23 +70,28 @@ router.post('/', authenticateUser,[
 
 
 router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
-    if ( !req.body.courseTitle || !req.body.courseDescription) {
-        res.status(400).json('"Course Title" and " Course Description" values required')
-    } else {
-    const user = await req.currentUser;
-    const course = await Course.findByPk(req.params.id);
-    if (course && user.id === course.userId) {
-        course.title = req.body.courseTitle;
-        course.description = req.body.courseDescription;
-        course.estimatedTime = req.body.estimatedTime;
-        course.materialsNeeded = req.body.materialsNeeded;
-        course.id = req.body.id;
-        await course.save();
-        res.status(204).end();
-    } else {
-        res.status(403).json(["You are not authorized to update this course information"]);
+    try {
+        const user = await req.currentUser;
+        const course = await Course.findByPk(req.params.id);
+        if (course && user.id === course.userId) {
+            course.title = req.body.courseTitle;
+            course.description = req.body.courseDescription;
+            course.estimatedTime = req.body.estimatedTime;
+            course.materialsNeeded = req.body.materialsNeeded;
+            course.id = req.body.id;
+            await course.save();
+            res.status(204).end();
+        } else {
+            res.status(403).json("You are not authorized to update this course information");
+        }
+    } catch (error) {
+        if (error.name === "SequelizeValidationError" || error.name === 'SequelizeUniqueConstraintError') {
+            const errors = error.errors.map(err => err.message);
+            res.status(400).json(errors);
+          } else {
+            throw error;
+          }
     }
-}
 }))
 
 //Allows authenticated users to delete courses
@@ -97,7 +102,7 @@ router.delete('/:id', authenticateUser, asyncHandler( async (req, res) => {
         await course.destroy();
         res.status(204).end();
     } else {
-        res.status(403).json(["You are not authorized to delete this course"])
+        res.status(403).json("You are not authorized to delete this course")
     }
 }));
 
