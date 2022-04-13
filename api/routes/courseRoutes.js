@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Course, User } = require('../models');
-const { body,check, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator');
 const { authenticateUser } = require('../middleware/auth-user');
 
 //Handles requests and passes errors to global handler
@@ -43,10 +43,10 @@ router.get('/:id', asyncHandler(async (req, res) =>{
 router.post('/', authenticateUser,[
     check('courseTitle')
         .exists({ checkNull: true, checkFalsy: true})
-        .withMessage('Please provide a value for "title"'),
+        .withMessage('Please provide a value for "Course Title"'),
     check('courseDescription')
         .exists({ checkNull: true, checkFalsy: true})
-        .withMessage('Please provide a value for "description"')
+        .withMessage('Please provide a value for "Course Description"')
 ], asyncHandler(async (req, res)=> {
     const errors = validationResult(req);
     const data = req.body;
@@ -68,10 +68,10 @@ router.post('/', authenticateUser,[
         }
 }));
 
-//allows authenticated users to update course information
+
 router.put('/:id', authenticateUser, asyncHandler( async (req, res) => {
     if ( !req.body.courseTitle || !req.body.courseDescription) {
-        res.status(400).json( ['"Title" and "Description" values required'])
+        res.status(400).json('"Course Title" and " Course Description" values required')
     } else {
     const user = await req.currentUser;
     const course = await Course.findByPk(req.params.id);

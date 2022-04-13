@@ -8,20 +8,53 @@ const UpdateCourse = () => {
     const { course } =  useOutletContext();
     const { user } = useOutletContext();
     const [inputs, setInputs] = useState({id:course.id,});
+    const [courseTitle, setCourseTitle] = useState({courseTitle: course.title})
+    const [courseDescription, setCourseDescription] = useState({courseDescription: course.description})
+    const [errors, setErrors] = useState([]);
     const { handleUpdate } = useUpdateData();
+    const navigate = useNavigate();
 
+    // useEffect(() => {
+    //     if (errors)
+    //     setErrors([]);
+    // },[])
 
-    const handleSubmit =  (e) => {
+    const createReq = (formData) => {
+        if (!formData.courseTitle || formData.courseTitle === course.title) {
+            setInputs(formData.courseTitle = course.title)
+        } else if (!formData.courseDescription || formData.courseDescription === course.description){
+            setInputs(formData.courseDescription = course.description)
+        } else if (formData.courseTitle !== course.title) {
+            setInputs(formData.courseTitle)
+        } else if (formData.courseDescription !== course.description){
+            setInputs(formData.courseDescription)
+        }
+        return formData;
+    }
 
-        e.preventDefault();
-        
-            if (!inputs.courseTitle && (course.title !== '')) {
-                setInputs(inputs.courseTitle = course.title)
-            } else if (!inputs.courseDescription && (course.description !== '')){
-                setInputs(inputs.courseDescription = course.description)
-            }
-   
-            handleUpdate(inputs, user.emailAddress, user.password)
+    const checkErrors = async (err) => {
+        if( err.length) {
+            setErrors([])
+            console.log(errors)
+        }   
+    }
+
+    const handleSubmit =  async (e) => {
+            e.preventDefault();
+            await checkErrors(errors)
+            await createReq(inputs);
+            await handleUpdate(inputs, user.emailAddress, user.password)
+                    .then( err => {
+                    if (err.length) {
+                    setErrors(err)
+                    } else {
+                    return;
+                    }})
+                .catch(err => {
+                    // console.log(err)
+                    navigate('/error');
+                })
+
     }
 
 
@@ -37,6 +70,19 @@ const UpdateCourse = () => {
         <main>
             <div className="wrap">
             <h2>Update Course</h2>
+            {
+                  errors.length ?
+                  <div>
+                    <div className="validation--errors">
+                      <h3>Validation Errors</h3>
+                      <ul>
+                        {<li>{errors}</li>}
+                      </ul>
+                    </div>
+                  </div>
+                :
+                <div></div>
+            }
             <form onSubmit={handleSubmit}>
                 <div className="main--flex">
                 <div>
