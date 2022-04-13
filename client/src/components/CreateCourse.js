@@ -1,16 +1,23 @@
-import React, {useEffect, useState} from 'react';
-import { useData, useUpdateData } from './Context';
+import React, { useState } from 'react';
+import { useUpdateData } from './Context';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import Header from './Header';
-import {ErrorMessage} from '@hookform/error-message';
 
+//Creates a new course
 const CreateCourse = () => {
+  //state
     const { user }  = useOutletContext();
-    const [inputs, setInputs] = useState({courseTitle: null, courseDescription: null, estimatedTime: null, materialsNeeded: null, userId: user.id });
+    const [inputs, setInputs] = useState({
+      courseTitle: null, 
+      courseDescription: null, 
+      estimatedTime: null, 
+      materialsNeeded: null, 
+      userId: user.id });
     const { handleCreate } = useUpdateData();
     const [errors, setErrors] = useState([])
     const navigate = useNavigate();
-
+    
+    //sends POST api call and catches errors for validation UI
     const handleSubmit = (e) => {
             e.preventDefault();
             handleCreate(inputs, user.emailAddress, user.password)
@@ -25,12 +32,16 @@ const CreateCourse = () => {
               navigate('/error');
           })
         }
-
+    
+    //keeps track of input values
     const handleInputChange = (e) => {
         e.persist();
         setInputs(inputs => ({...inputs, [e.target.name]: e.target.value}));
       }
 
+    /*renders 'Create Course' form and 
+    validation errors if 'courseTitle' or 
+    'courseDescription' are invalid */
     return (
       <>
         <Header />

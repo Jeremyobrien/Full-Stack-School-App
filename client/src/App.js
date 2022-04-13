@@ -1,6 +1,6 @@
-import {Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
+import React from 'react';
+import { Routes, Route } from 'react-router-dom'
 import { ResultProvider } from './components/Context';
-// import './App.css';
 import Courses from './components/Courses';
 import NotFound from './components/NotFound';
 import CreateCourse from './components/CreateCourse';
@@ -11,11 +11,11 @@ import UserSignUp from './components/UserSignUp';
 import UserSignOut from './components/UserSignOut';
 import UnhandledError from './components/UnhandledError';
 import PrivateRoute from './components/PrivateRoute';
-import React from 'react';
+
 
 function App() {
   return (
-    //routes for SPA
+    //routes for SPA and Provider function wrapper
     <ResultProvider>
         <div>             
               <Routes>

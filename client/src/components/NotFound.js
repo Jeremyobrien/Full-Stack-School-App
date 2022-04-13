@@ -1,5 +1,6 @@
 import React from 'react';
 
+//Renders not found route for 404 errors
 const NotFound = () => {
     return (
         <li className="not-found">

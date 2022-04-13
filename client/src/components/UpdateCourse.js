@@ -1,10 +1,14 @@
-import React, {useEffect, useState, useRef, Fragment} from 'react';
+import React, { useState, Fragment } from 'react';
 import { useUpdateData } from './Context';
-import { Navigate, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import Header from './Header';
 
+/*Renders form with existing course data and displays
+  validation errors when relevant */
 const UpdateCourse = () => {
+
+    //state
     const { course } =  useOutletContext();
     const { user } = useOutletContext();
     const [inputs, setInputs] = useState({
@@ -16,38 +20,40 @@ const UpdateCourse = () => {
     const { handleUpdate } = useUpdateData();
     const navigate = useNavigate();
 
-
+    /* Checks for and clears existing errors
+    before resubmission of updated course data */
     const checkErrors = async (err) => {
         if(err) {
             return setErrors('');
         }   
     }
 
+    // Sends PUT request to api and checks for errors
     const handleSubmit =  async (e) => {
             e.preventDefault();
             await checkErrors(errors)
             await handleUpdate(inputs, user.emailAddress, user.password)
                     .then( err => {
-                    if (err.length) {
-                    setErrors(err)
-                    } else {
-                    return;
+                        if (err.length) {
+                        setErrors(err)
+                        } else {
+                        return;
                     }})
                 .catch(err => {
                     console.log(err)
-                    // navigate('/error');
+                    navigate('/error');
                 })
 
     }
 
-
+    //Keeps track of changes in input fields
     const handleInputChange = (e) => {
         e.persist();
         setInputs(inputs => ({...inputs, [e.target.name]: e.target.value}));
       }
 
-    return (
-
+//Conditionally renders errors and form
+  return (
     <Fragment>
         <Header />
         <main>

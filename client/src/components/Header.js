@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom'
-import { useData, useUpdateData } from './Context';
+import { useData } from './Context';
 
+//Stateless component that conditionally renders signed-in user's name and signout button
 const Header = () => {
     const { user } = useData();
-    const { signOut } = useUpdateData();
 
     return(
         <div>
@@ -20,7 +20,6 @@ const Header = () => {
                 <link href="../styles/reset.css" rel="stylesheet" />
                 <link href="../styles/global.css" rel="stylesheet" />
             </div>
-
             <header>
                 <div className="wrap header--flex">
                     <h1 className="header--logo"><NavLink to={'/'}>Courses</NavLink></h1>
@@ -28,8 +27,7 @@ const Header = () => {
                     {
                         user ?
                             <React.Fragment>
-                                <span>Welcome, {user.firstName} {user.lastName}{' '}</span>
-                                
+                                <span>Welcome, {user.firstName} {user.lastName}!</span>&nbsp;&nbsp;&nbsp;                
                                 <NavLink to={'/signout'}>Sign Out</NavLink>
                             </React.Fragment>
                          :

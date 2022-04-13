@@ -1,46 +1,44 @@
 
 import React, { useEffect, useState } from 'react';
-import { NavLink, Outlet, useParams, useLocation, Route, Routes, Navigate, useNavigate } from 'react-router-dom';
+import { NavLink, useParams, useNavigate } from 'react-router-dom';
 import { useData, useUpdateData } from './Context';
 import axios from 'axios';
 import Header from './Header';
 import ReactMarkdown from 'react-markdown';
 
-
+/*displays specific information about course 
+renders 'Update Course' and 'Delete Course' options for authorized users */
 const CourseDetail = () => {
+    //state
     const { user } = useData();
     const [authUser, setAuthUser] = useState(null);
-    const {handleDelete, handleCourseUpdate} = useUpdateData();
+    const { handleDelete, handleCourseUpdate } = useUpdateData();
     const [course, setCourse] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
     const navigate = useNavigate();
 
+    //generates course specific information on load
     useEffect( ()=> {
-
             const getCourse = async () => {
                 const response = await axios.get(`http://localhost:5000/api/courses/${id}`)
                 setCourse(response.data)
                 setIsLoading(false);
               };
               getCourse();
-
-
     }, [id]);
 
+    //passes selected course's state to global state
+    useEffect( ()=> {
+        handleCourseUpdate(course)
+    },[course, handleCourseUpdate])
+
+    //sets auth user data for 'handleDelete' function
     useEffect( () => {
         setAuthUser(user);
     }, [user]);
 
-    useEffect( ()=> {
-    handleCourseUpdate(course)
-    }, [course]);
-
-
-
-
-
-
+//conditionally renders UI for authenticated users
 return (
     isLoading ?
     <h2>Loading...</h2>

@@ -1,15 +1,14 @@
 import React, { useData } from './Context';
-import { NavLink, Routes, Route } from 'react-router-dom';
+import { NavLink} from 'react-router-dom';
 import Header from './Header';
 
-
+//Renders list of courses and ability to create a new course
 const Courses = () => {
-    
+
+    //state
     const { list } = useData();
 
     return (
-
-
             <div id="root">
             <Header />
             <main>
@@ -31,9 +30,7 @@ const Courses = () => {
                 </div>
             </main>
             </div>
-
     );
-
 }
 
 export default Courses;

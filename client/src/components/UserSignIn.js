@@ -1,21 +1,23 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Header from './Header';
-import { useData, useUpdateData } from './Context';
+import { useUpdateData } from './Context';
 
+//collects signin information and allows access when applicable
 const UserSignIn = () => {
+    //state
     const [inputs, setInputs] = useState({});
     const [errors, setErrors] = useState([]);
     const { signIn } = useUpdateData();
     const navigate = useNavigate();
 
-    // const { emailAddress, password } = user
+    //checks for errors, signs user in 
     const handleSubmit = (e) => {
         e.preventDefault();
         signIn(inputs.emailAddress, inputs.password)
             .then( authUser => {
                 if ( authUser === null) {
-                    return setErrors('Sign-in was unsuccessful');
+                    return console.log('Sign-in was unsuccessful');
                 } else {            
                     console.log(`Sign-in was SUCCESSFUL!`);
                     navigate('/');
@@ -28,18 +30,20 @@ const UserSignIn = () => {
 
     }
 
+    //tracks changes in input fields
     const handleInputChange = (e) => {
         e.persist();
         setInputs(inputs => ({...inputs, [e.target.name]: e.target.value}));
       }
-
+    
+    //Renders signin page
     return (
         <div>
             <Header />
             <main>
                 <div className="form--centered">
                 <h2>Sign In</h2>
-                <form errors={errors} onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <label htmlFor="emailAddress">Email Address</label>
                     <input id="emailAddress" name="emailAddress" type="email"  onChange={handleInputChange} value={inputs.emailAddress}/>
                     <label htmlFor="password">Password</label>

@@ -4,7 +4,7 @@ import React, {
     useState
 }from 'react';
 import axios from 'axios';
-import { Route, useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import { Buffer } from 'buffer';
 import config from './config';
 //create context for variables and functions
@@ -31,19 +31,12 @@ export function ResultProvider({ children }) {
   const navigate = useNavigate();
 
 
+//brings in list of courses on render
   useEffect( ()=> {   
       getCourses();
   }, []);
 
-   // .then( res => {
-                                //   if(res.status !== 200) {
-                                //     throw Error('failed to fetch courses');
-                                //   } else {
-                                //     return setList(res.data);
-                                //   }
-                                // })
-                                // .catch( err => setError(err.message));
-
+//fetches list of courses from api
   const getCourses = async () => {
      await axios.get('http://localhost:5000/api/courses')
                 .then( res => setList(res.data))
@@ -53,6 +46,7 @@ export function ResultProvider({ children }) {
                 });                           
   };
 
+//function that completes fetch requests and creates auth headers
   const api = (path, method = 'GET', body = null, requiresAuth = false, credentials = null ) => {
     const url = config.apiBaseUrl + path;
   
@@ -75,7 +69,7 @@ export function ResultProvider({ children }) {
     return fetch(url, options);
   }
 
-
+//helper function to get specific user
   const getUser = async (emailAddress, password) => {
     const response = await api(`/users`, 'GET', null, true, { emailAddress, password } );
               if (response.status === 200) {
@@ -88,7 +82,8 @@ export function ResultProvider({ children }) {
                 throw new Error();
               }
   }
-  
+
+  //signs in and stores active user's data
   const signIn = async (emailAddress, password) => {
     const user =  await getUser(emailAddress, password);
     if ( user !== null ) {
@@ -99,23 +94,12 @@ export function ResultProvider({ children }) {
     }
 }
 
+//signs out user
 const   signOut = () => {
     setUser(null);
 }
 
-// .then( async res => {
-//   if (res.status === 400) {   
-//       const data = await res.json();
-//       return data;
-//   } else if (res.status === 201) {
-//       setUser(user);
-//       signIn(user.emailAddress, user.password)
-//       navigate('/') }
-//       else {
-//             throw new Error();
-//           }
-// })
-
+//Creates new user and signs them in with their credentials
 const createUser = async (user) => {
  const response = await api('/users', 'POST', user);
         if (response.status === 201) {
@@ -131,16 +115,19 @@ const createUser = async (user) => {
       }
 }
 
+//sets new course
     const handleCourseUpdate = (res) => {
               return setCourse(res)
       }
 
+//deletes selected course
     const handleDelete = async (courseId, emailAddress, password) => {
         await api(`/courses/${courseId}`, 'DELETE', {}, true, { emailAddress, password } )
         await getCourses();
         navigate('/');
     }
 
+//creates new course
     const handleCreate = async (newCourse, emailAddress, password) => {
       const response =  await api(`/courses`, 'POST', newCourse, true, { emailAddress, password } );
         if(response.status === 201) { 
@@ -158,6 +145,7 @@ const createUser = async (user) => {
         }
     }
 
+//updates existing course
     const handleUpdate = async (updatedCourse, emailAddress, password) => {
       const response =  await api(`/courses/${updatedCourse.id}`, 'PUT', updatedCourse, true, { emailAddress, password } )
               if(response.status === 204) {
@@ -174,14 +162,15 @@ const createUser = async (user) => {
               }
     }
 
-    
+//Global providers 
     return (
         <ResultContext.Provider value={{ list, id, user, course, error }}>       
-            <ResultUpdateContext.Provider value={{ api, createUser, signIn, handleDelete, handleCreate, handleUpdate, handleCourseUpdate, signOut, setError }}>
+            <ResultUpdateContext.Provider value={{ 
+              api, createUser, signIn, handleDelete, 
+              handleCreate, handleUpdate, handleCourseUpdate, 
+              signOut, setError }}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>
     );
-
-
 }

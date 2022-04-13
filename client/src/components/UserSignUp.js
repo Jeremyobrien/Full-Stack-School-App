@@ -3,16 +3,23 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import Header from './Header';
 import { useUpdateData } from './Context';
 
+/* sign up form that renders relevant validation errors or 
+signs in new validated user */
 const UserSignUp = () => {
 
-    const [inputs, setInputs] = useState({firstName:'', lastName:'', emailAddress:'', password:''});
+    const [inputs, setInputs] = useState({
+        firstName:'', 
+        lastName:'', 
+        emailAddress:'', 
+        password:''
+      });
     const [errors, setErrors] = useState([]);
     const { createUser } = useUpdateData();
     const navigate = useNavigate();
 
+//either creates and signs in new user or captures errors
     const handleSubmit = (e) => {
             e.preventDefault();
-            console.log(inputs)
             createUser(inputs)
                 .then( err => {
                     if (err.length) {
@@ -26,12 +33,14 @@ const UserSignUp = () => {
                     navigate('/error');
                 });
         }
-
+    
+    //tracks changes in input fields
     const handleInputChange = (e) => {
         e.persist();
         setInputs(inputs => ({...inputs, [e.target.name]: e.target.value}));
       }
 
+ //renders form and conditionally renders validation errors
     return (
     <div>
        <Header />
@@ -39,7 +48,7 @@ const UserSignUp = () => {
         <div className="form--centered">
           <h2>Sign Up</h2>
           {
-                  errors.length ?
+                errors.length ?
                   <div>
                     <div className="validation--errors">
                       <h3>Validation Errors</h3>
@@ -50,7 +59,7 @@ const UserSignUp = () => {
                   </div>
                 :
                 <div></div>
-            }
+          }
           <form onSubmit={handleSubmit}>
             <label htmlFor="firstName">First Name</label>
             <input id="firstName" name="firstName" type="text" onChange={handleInputChange} value={inputs.firstName} />
