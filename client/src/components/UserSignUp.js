@@ -5,25 +5,26 @@ import { useUpdateData } from './Context';
 
 const UserSignUp = () => {
 
-    const [inputs, setInputs] = useState({});
-    const [err, setErr] = useState([]);
+    const [inputs, setInputs] = useState({firstName:'', lastName:'', emailAddress:'', password:''});
+    const [errors, setErrors] = useState([]);
     const { createUser } = useUpdateData();
     const navigate = useNavigate();
 
     const handleSubmit = (e) => {
             e.preventDefault();
+            console.log(inputs)
             createUser(inputs)
-                // .then( errors => {
-                //     if (errors) {
-                //         setErr(errors)
-                //     } else {
-                //         console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
-                //       }
-                //     })
-                // .catch( err => {
-                //     console.log(err);
-                //     navigate('/error');
-                // });
+                .then( err => {
+                    if (err.length) {
+                        setErrors(err)
+                    } else {
+                        console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
+                      }
+                    })
+                .catch( err => {
+                    console.log(err);
+                    navigate('/error');
+                });
         }
 
     const handleInputChange = (e) => {
@@ -37,6 +38,19 @@ const UserSignUp = () => {
         <main>
         <div className="form--centered">
           <h2>Sign Up</h2>
+          {
+                  errors.length ?
+                  <div>
+                    <div className="validation--errors">
+                      <h3>Validation Errors</h3>
+                      <ul>
+                        {errors.map((err, index) => <li key={index}>{err}</li>)}
+                      </ul>
+                    </div>
+                  </div>
+                :
+                <div></div>
+            }
           <form onSubmit={handleSubmit}>
             <label htmlFor="firstName">First Name</label>
             <input id="firstName" name="firstName" type="text" onChange={handleInputChange} value={inputs.firstName} />

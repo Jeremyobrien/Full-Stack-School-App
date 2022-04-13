@@ -103,21 +103,32 @@ const   signOut = () => {
     setUser(null);
 }
 
+// .then( async res => {
+//   if (res.status === 400) {   
+//       const data = await res.json();
+//       return data;
+//   } else if (res.status === 201) {
+//       setUser(user);
+//       signIn(user.emailAddress, user.password)
+//       navigate('/') }
+//       else {
+//             throw new Error();
+//           }
+// })
+
 const createUser = async (user) => {
- await api('/users', 'POST', user)
-        .then( res => {
-         if (res.status === 400) {   
-              throw new Error('Insufficient information provided to create an account')
-          } else if (res.status === 201) {
-              setUser(user);
-              signIn(user.emailAddress, user.password)
-              navigate('/') }
-              else {
-                    throw new Error();
-                  }
-                })
-            .catch( err => setError(err.message));
-            console.log(error)
+ const response = await api('/users', 'POST', user);
+        if (response.status === 201) {
+            setUser(user);
+            signIn(user.emailAddress, user.password)
+            navigate('/')
+        } else if (response.status === 400) {   
+            return response.json().then( data => {
+                  return data;
+            })
+      } else {
+            throw new Error();
+      }
 }
 
     const handleCourseUpdate = (res) => {

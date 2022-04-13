@@ -46,13 +46,13 @@ router.post('/', [
   check('password')
     .exists({ checkNull: true, checkFalsy: true })
     .withMessage('Please provide a value for "password"')
-], asyncHandler( async (req, res, next)=> {
+], asyncHandler( async (req, res)=> {
     try {
     const errors = validationResult(req);
     const data = req.body;
     if (!errors.isEmpty()) {
       const errorMessages = errors.array().map( error => error.msg);
-      res.status(400).json({ errors: errorMessages });
+      res.status(400).json(errorMessages);
    } else {
       const encrytedPassword = data.password = bcrypt.hashSync(data.password, 10);
       const user = await User.create({
@@ -66,14 +66,14 @@ router.post('/', [
                .location('/')
                .end();
     }
-  //handles "SequelizeUniqueConstraintError"
+  //Handles "SequelizeUniqueConstraintError" and 'SequelizeValidationError'
   } catch (error) {
-    if (error.name === "SequelizeUniqueConstraintError" ) {
+    if (error.name === 'SequelizeValidationError' || error.name === 'SequelizeUniqueConstraintError')  {
       const errors = error.errors.map( err => err.message);
       console.error( "Validation errors: ", errors);
-      res.status(400).json({ errors });
+      res.status(400).json(errors);
     } else {
-      next(error);
+      throw Error();
     }
   }
 }));
