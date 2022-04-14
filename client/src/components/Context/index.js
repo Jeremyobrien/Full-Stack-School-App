@@ -5,6 +5,7 @@ import React, {
 }from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
+// import Cookies from 'js-cookie';
 import { Buffer } from 'buffer';
 import config from './config';
 //create context for variables and functions
@@ -22,13 +23,26 @@ export function useUpdateData() {
 //maintains state of app
 export function ResultProvider({ children }) {
   
-
+  //state
   const [ list, setList ] = useState([]);
   const [ user, setUser ] = useState(null);
   const [course, setCourse] = useState();
-  const [error, setError] = useState(null);
   const { id } = useParams;
   const navigate = useNavigate();
+
+
+  /* EXAMPLE OF CREATING GLOBAL COOKIE STATE WITH JS-COOKIE V^3.01 
+  SEE 'signin' FUNCTION FURTHER DOWN FOR INITIALIZATION */
+  // const [authUser, setAuthUser] = useState([])
+  // const cookieE = Cookies.get('authEmail')
+  // const cookieP = Cookies.get('authPassword')
+  // const cookieFN = Cookies.get('authFirstName')
+  // const cookieLN = Cookies.get('authLastName')
+  // const cookieId = Cookies.get('authUserId')
+  // //Create Cookie state
+  // useEffect( () => {
+  //   setAuthUser([cookieE, cookieFN, cookieId, cookieLN, cookieP])
+  // },[cookieE, cookieFN, cookieId, cookieLN, cookieP]);
 
 //brings in list of courses on render
   useEffect( ()=> {   
@@ -41,7 +55,6 @@ export function ResultProvider({ children }) {
                 .then( res => setList(res.data))
                 .catch( err => {
                   console.log(err.message)
-                  setError( err.message )
                   navigate('/errors')
                 });                           
   };
@@ -91,13 +104,19 @@ export function ResultProvider({ children }) {
     if ( user !== null ) {
         user.password = password
         setUser(user)
+        // /*EXAMPLE OF INITIALIZING COOKIES WITH JS-COOKIE V^3.01*/
+        // Cookies.set('authEmail', JSON.stringify(user.emailAddress), { expires: 1});
+        // Cookies.set('authPassword', JSON.stringify(user.password), {expires: 1});
+        // Cookies.set('authFirstName', JSON.stringify(user.firstName), {expires: 1});
+        // Cookies.set('authLastName', JSON.stringify(user.lastName), {expires: 1});
+        // Cookies.set('authUserId', JSON.parse(user.id), {expires: 1});
     } else {
         return;
     }
 }
 
 //signs out user
-const   signOut = () => {
+const signOut = () => {
     setUser(null);
 }
 
@@ -174,11 +193,11 @@ const createUser = async (user) => {
 
 //Global providers 
     return (
-        <ResultContext.Provider value={{ list, id, user, course, error }}>       
+        <ResultContext.Provider value={{ list, id, user, course}}>       
             <ResultUpdateContext.Provider value={{ 
-              api, createUser, signIn, handleDelete, 
+              createUser, signIn, handleDelete, 
               handleCreate, handleUpdate, handleCourseUpdate, 
-              signOut, setError }}>
+              signOut}}>
                 {children}
             </ResultUpdateContext.Provider>
         </ResultContext.Provider>

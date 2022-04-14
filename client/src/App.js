@@ -24,7 +24,7 @@ function App() {
                   <Route path='courses/create' element={<PrivateRoute />} >
                     <Route index element={<CreateCourse />} />
                   </Route>
-                  <Route path='courses/:id' element={ <CourseDetail />} />
+                  <Route path='courses/:id' index element={ <CourseDetail />} />
                   <Route path='courses/:id/update' element={<PrivateRoute />} >
                     <Route index element={<UpdateCourse />} />
                   </Route>

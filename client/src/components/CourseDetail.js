@@ -13,7 +13,7 @@ const CourseDetail = () => {
     const { user } = useData();
     const [authUser, setAuthUser] = useState(null);
     const { handleDelete, handleCourseUpdate } = useUpdateData();
-    const [course, setCourse] = useState(null);
+    const [course, setCourse] = useState({});
     const [isLoading, setIsLoading] = useState(true);
     const { id } = useParams();
     const navigate = useNavigate();
@@ -80,7 +80,7 @@ return (
                 <h3 className="course--detail--title">Course</h3>
                 <h4 className="course--name">{course.title}</h4>
                 <p>By {course.userInfo.firstName} {course.userInfo.lastName}</p>
-                <p>{course.description}</p>
+                <ReactMarkdown>{course.description}</ReactMarkdown>
             </div>
             <div>
                 <h3 className="course--detail--title">Estimated Time</h3>

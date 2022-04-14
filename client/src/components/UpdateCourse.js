@@ -1,6 +1,6 @@
-import React, { useState, Fragment, useEffect } from 'react';
+import React, { useState, Fragment } from 'react';
 import { useUpdateData } from './Context';
-import { NavLink, useNavigate, useParams } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import Header from './Header';
 
@@ -20,7 +20,6 @@ const UpdateCourse = () => {
     const { handleUpdate } = useUpdateData();
     const navigate = useNavigate();
 
-    
     /* Checks for and clears existing errors
     before resubmission of updated course data */
     const checkErrors = async (err) => {
@@ -93,7 +92,7 @@ const UpdateCourse = () => {
                 </div>
                 </div>
                 <button className="button" type="submit">Update Course</button>
-                <NavLink to={'/'} className="button button-secondary">Cancel</NavLink>
+                <NavLink to={`/courses/${course.id}`} className="button button-secondary">Cancel</NavLink>
             </form>
             </div>
         </main>
