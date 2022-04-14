@@ -1,12 +1,18 @@
 import React from 'react';
-
+import Header from './Header';
 //Renders not found route for 404 errors
 const NotFound = () => {
+
     return (
-        <li className="not-found">
-            <h3>No Results Found</h3>
-            <p>Your search did not return any results. Please try again.</p>
-        </li>
+        <>
+        <Header />
+              <main>
+                <div className="wrap">
+                  <h2>Not Found</h2>
+                  <p>Sorry! We couldn't find the page you're looking for.</p>
+                </div>
+              </main>
+        </>
     );
 };
 

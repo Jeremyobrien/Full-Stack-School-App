@@ -1,6 +1,6 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import { useUpdateData } from './Context';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useParams } from 'react-router-dom';
 import { useOutletContext } from 'react-router-dom';
 import Header from './Header';
 
@@ -20,6 +20,7 @@ const UpdateCourse = () => {
     const { handleUpdate } = useUpdateData();
     const navigate = useNavigate();
 
+    
     /* Checks for and clears existing errors
     before resubmission of updated course data */
     const checkErrors = async (err) => {
@@ -31,19 +32,22 @@ const UpdateCourse = () => {
     // Sends PUT request to api and checks for errors
     const handleSubmit =  async (e) => {
             e.preventDefault();
-            await checkErrors(errors)
-            await handleUpdate(inputs, user.emailAddress, user.password)
+            if (course.userInfo.id === user.id) {
+                await checkErrors(errors)
+                await handleUpdate(inputs, user.emailAddress, user.password)
                     .then( err => {
                         if (err.length) {
                         setErrors(err)
                         } else {
                         return;
                     }})
-                .catch(err => {
-                    console.log(err)
-                    navigate('/error');
-                })
-
+                    .catch(err => {
+                        console.log(err)
+                        navigate("/error");
+                    })
+            } else {
+                navigate('/forbidden')
+            }
     }
 
     //Keeps track of changes in input fields
@@ -93,7 +97,7 @@ const UpdateCourse = () => {
             </form>
             </div>
         </main>
-    </Fragment>
+     </Fragment>
     );
 }
 

@@ -31,7 +31,8 @@ router.get('/:id', asyncHandler(async (req, res) =>{
                                                           include: [{model: User, as: 'userInfo', attributes: ['id', 'firstName', 'lastName', 'emailAddress']}]                                                   
                                                         });
     if (course){
-        res.location(`courses/${req.params.id}`)
+        res.status(200)
+           .location(`courses/${req.params.id}`)
            .json(course);
     } else {
         res.status(404)

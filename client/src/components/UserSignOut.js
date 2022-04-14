@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import Courses from './Courses';
+import { useEffect } from 'react';
 import { useUpdateData } from './Context';
 import { useNavigate } from 'react-router-dom';
 

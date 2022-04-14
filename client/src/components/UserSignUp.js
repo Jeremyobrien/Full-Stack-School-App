@@ -21,11 +21,11 @@ const UserSignUp = () => {
     const handleSubmit = (e) => {
             e.preventDefault();
             createUser(inputs)
-                .then( err => {
-                    if (err.length) {
-                        setErrors(err)
+                .then( res => {
+                    if (res) {
+                      setErrors(res)                  
                     } else {
-                        console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
+                      console.log(`${inputs.emailAddress} is successfully signed up and authenticated!`)
                       }
                     })
                 .catch( err => {

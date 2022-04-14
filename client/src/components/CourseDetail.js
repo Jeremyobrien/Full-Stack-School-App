@@ -21,19 +21,31 @@ const CourseDetail = () => {
     //generates course specific information on load
     useEffect( ()=> {
             const getCourse = async () => {
-                const response = await axios.get(`http://localhost:5000/api/courses/${id}`)
-                setCourse(response.data)
-                setIsLoading(false);
+                 await axios.get(`http://localhost:5000/api/courses/${id}`)
+                                .then( response => {
+                                        setCourse(response.data)
+                                        setIsLoading(false);
+                                })
+                                .catch( error => {
+                                    if (error.message === 'Network Error'){
+                                        console.log(error.message)
+                                        navigate('/error')
+                                    } else {
+                                        navigate('/notfound')
+                                    }
+                                })
               };
+
               getCourse();
-    }, [id]);
+
+    }, [id, navigate]);
 
     //passes selected course's state to global state
     useEffect( ()=> {
         handleCourseUpdate(course)
     },[course, handleCourseUpdate])
 
-    //sets auth user data for 'handleDelete' function
+    //sets authUser data for 'handleDelete' function
     useEffect( () => {
         setAuthUser(user);
     }, [user]);

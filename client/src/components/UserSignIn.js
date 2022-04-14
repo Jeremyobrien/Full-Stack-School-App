@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useCookies } from "react-cookie";
 import Header from './Header';
 import { useUpdateData } from './Context';
 
@@ -7,9 +8,11 @@ import { useUpdateData } from './Context';
 const UserSignIn = () => {
     //state
     const [inputs, setInputs] = useState({});
-    const [errors, setErrors] = useState([]);
     const { signIn } = useUpdateData();
     const navigate = useNavigate();
+    const [cookies, setCookie] = useCookies(['user']);
+
+    console.log(cookies)
 
     //checks for errors, signs user in 
     const handleSubmit = (e) => {
@@ -19,7 +22,8 @@ const UserSignIn = () => {
                 if ( authUser === null) {
                     return console.log('Sign-in was unsuccessful');
                 } else {            
-                    console.log(`Sign-in was SUCCESSFUL!`);
+                    // console.log(`Sign-in was SUCCESSFUL!`);
+                    handleCookies();
                     navigate('/');
                 }
             })
@@ -29,6 +33,12 @@ const UserSignIn = () => {
             })
 
     }
+
+    //sets cookies
+  const handleCookies = () => {
+    setCookie('Email', inputs.emailAddress, { path: '/' });
+    setCookie('Password', inputs.password, { path: '/' });
+    };
 
     //tracks changes in input fields
     const handleInputChange = (e) => {

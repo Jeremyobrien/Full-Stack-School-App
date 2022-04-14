@@ -30,7 +30,6 @@ export function ResultProvider({ children }) {
   const { id } = useParams;
   const navigate = useNavigate();
 
-
 //brings in list of courses on render
   useEffect( ()=> {   
       getCourses();
@@ -43,6 +42,7 @@ export function ResultProvider({ children }) {
                 .catch( err => {
                   console.log(err.message)
                   setError( err.message )
+                  navigate('/errors')
                 });                           
   };
 
@@ -69,6 +69,7 @@ export function ResultProvider({ children }) {
     return fetch(url, options);
   }
 
+
 //helper function to get specific user
   const getUser = async (emailAddress, password) => {
     const response = await api(`/users`, 'GET', null, true, { emailAddress, password } );
@@ -79,6 +80,7 @@ export function ResultProvider({ children }) {
                 throw new Error("Unable to access user's data")
               }
               else {
+                navigate('/error');
                 throw new Error();
               }
   }
@@ -111,6 +113,7 @@ const createUser = async (user) => {
                   return data;
             })
       } else {
+            navigate('/error');
             throw new Error();
       }
 }
@@ -122,9 +125,14 @@ const createUser = async (user) => {
 
 //deletes selected course
     const handleDelete = async (courseId, emailAddress, password) => {
-        await api(`/courses/${courseId}`, 'DELETE', {}, true, { emailAddress, password } )
-        await getCourses();
-        navigate('/');
+        try {
+          await api(`/courses/${courseId}`, 'DELETE', {}, true, { emailAddress, password } )
+          await getCourses();
+          navigate('/');
+         } catch(err) {
+           return navigate('/error')
+         }
+
     }
 
 //creates new course
@@ -141,6 +149,7 @@ const createUser = async (user) => {
           });
 
         } else {
+          navigate('/error')
           throw new Error();
         }
     }
@@ -158,6 +167,7 @@ const createUser = async (user) => {
                   return data;
                 });
               } else {
+                navigate('/error')
                 throw new Error();
               }
     }
