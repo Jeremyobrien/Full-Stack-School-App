@@ -23,9 +23,18 @@ app.use(cors());
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
-  res.json({
-    message: 'Welcome to the REST API project!',
-  });
+  res.sendFile(
+    path.join(_dirname, "../client/build/index.html"),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      } else{
+        res.json({
+          message: 'Welcome to the REST API project!',
+        });
+      }
+    }
+  )
 });
 
 // route middleware
