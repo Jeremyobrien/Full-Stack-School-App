@@ -24,7 +24,7 @@ app.use(cors());
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
   res.sendFile(
-    path.join(_dirname, "../client/src/index.js"),
+    path.join(_dirname, "../client/src/App.js"),
     function (err) {
       if (err) {
         res.status(500).send(err);
