@@ -10,6 +10,7 @@ module.exports = {
     use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
     protocol: 'postgres',
+    migrationStorageTableName: "sequelize_meta",
     dialectOptions: {
       ssl: {
         require: true,
